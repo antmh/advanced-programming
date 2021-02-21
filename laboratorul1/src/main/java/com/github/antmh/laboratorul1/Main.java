@@ -220,9 +220,15 @@ public class Main {
         }
     }
 
+    void bonus() {
+        RandomTree randomTree = new RandomTree();
+        randomTree.print();
+    }
+
     public static void main(String[] args) {
         Main m = new Main();
         m.compulsory();
         m.optional(args);
+        m.bonus();
     }
 }
