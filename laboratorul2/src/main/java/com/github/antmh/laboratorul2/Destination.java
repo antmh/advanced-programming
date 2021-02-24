@@ -25,8 +25,12 @@ public class Destination {
     }
 
     @Override
-    public String toString() {
-        return "Destination [name=" + name + ", demand=" + demand + "]";
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        
+        return ((Destination)obj).name.equals(name);
     }
 
     public Destination(String name, int demand) {

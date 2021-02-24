@@ -38,6 +38,15 @@ public class Source {
         return "Source [name=" + name + ", sourceType=" + sourceType + ", supply=" + supply + "]";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        
+        return ((Source)obj).name.equals(name);
+    }
+
     public Source(String name, SourceType sourceType, int supply) {
         this.name = name;
         this.sourceType = sourceType;

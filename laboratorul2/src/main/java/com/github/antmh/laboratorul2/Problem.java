@@ -23,6 +23,12 @@ public class Problem {
     }
 
     public void addSource(Source source, int... destinationCosts) {
+        for (Source addedSource : sources) {
+            if (source.equals(addedSource)) {
+                throw new IllegalArgumentException("Source already added");
+            }
+        }
+
         if (destinationCosts.length != destinations.size()) {
             throw new IllegalArgumentException("Incorrect number of destination costs");
         }
@@ -37,22 +43,28 @@ public class Problem {
     }
 
     public void addDestination(Destination destination, int... sourceCosts) {
+        for (Destination addedDestination : destinations) {
+            if (destination.equals(addedDestination)) {
+                throw new IllegalArgumentException("Destination already added");
+            }
+        }
+
         if (sourceCosts.length != sources.size()) {
             throw new IllegalArgumentException("Incorrect number of source costs");
         }
         destinations.add(destination);
-        
+
         ArrayList<Integer> row = new ArrayList<Integer>();
         for (int i : sourceCosts) {
             row.add(i);
         }
         cost.add(row);
     }
-    
+
     public Source getSource(int index) {
         return sources.get(index);
     }
-    
+
     public Destination getDestination(int index) {
         return destinations.get(index);
     }
