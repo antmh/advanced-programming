@@ -1,4 +1,4 @@
-package com.github.antmh.laboratorul1;
+package lab1;
 
 import java.util.Vector;
 import java.util.Stack;

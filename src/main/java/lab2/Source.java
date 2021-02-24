@@ -1,4 +1,4 @@
-package com.github.antmh.laboratorul2;
+package lab2;
 
 /**
  * @author Antonio Mihăeș

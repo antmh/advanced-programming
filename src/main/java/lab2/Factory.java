@@ -1,12 +1,12 @@
-package com.github.antmh.laboratorul2;
+package lab2;
 
 /**
  * @author Antonio Mihăeș
  */
-public class Warehouse extends Source {
+public class Factory extends Source {
     @Override
     public String toString() {
-        return "Warehouse [name=" + name + ", supply=" + supply + "]";
+        return "Factory [name=" + name + ", supply=" + supply + "]";
     }
 
     @Override
@@ -15,11 +15,10 @@ public class Warehouse extends Source {
             return false;
         }
 
-        return ((Warehouse) obj).name.equals(name);
+        return ((Factory) obj).name.equals(name);
     }
 
-    public Warehouse(String name, int supply) {
+    public Factory(String name, int supply) {
         super(name, supply);
     }
-
 }
