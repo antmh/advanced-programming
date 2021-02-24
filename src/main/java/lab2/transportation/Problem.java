@@ -1,6 +1,8 @@
-package lab2;
+package lab2.transportation;
 
 import java.util.ArrayList;
+import lab2.transportation.model.Destination;
+import lab2.transportation.model.Source;
 
 /**
  * @author Antonio Mihăeș
@@ -10,16 +12,26 @@ public class Problem {
     private ArrayList<Source> sources;
     private ArrayList<Destination> destinations;
 
-    public ArrayList<ArrayList<Integer>> getCost() {
+    public Problem() {
+        cost = new ArrayList<>();
+        sources = new ArrayList<>();
+        destinations = new ArrayList<>();
+    }
+
+    public final ArrayList<ArrayList<Integer>> getCost() {
         return cost;
+    }
+
+    public final ArrayList<Source> getSources() {
+        return sources;
+    }
+
+    public final ArrayList<Destination> getDestinations() {
+        return destinations;
     }
 
     public void setCost(ArrayList<ArrayList<Integer>> cost) {
         this.cost = cost;
-    }
-
-    public ArrayList<Source> getSources() {
-        return sources;
     }
 
     public void addSource(Source source, int... destinationCosts) {
@@ -36,10 +48,6 @@ public class Problem {
         for (int i = 0; i < destinationCosts.length; ++i) {
             cost.get(i).add(destinationCosts[i]);
         }
-    }
-
-    public ArrayList<Destination> getDestinations() {
-        return destinations;
     }
 
     public void addDestination(Destination destination, int... sourceCosts) {
@@ -60,23 +68,13 @@ public class Problem {
         }
         cost.add(row);
     }
-
-    public Source getSource(int index) {
-        return sources.get(index);
-    }
-
-    public Destination getDestination(int index) {
-        return destinations.get(index);
+    
+    public void solveSimple() {
+        
     }
 
     @Override
     public String toString() {
         return "Problem [cost=" + cost + ", sources=" + sources + ", destinations=" + destinations + "]";
-    }
-
-    public Problem() {
-        cost = new ArrayList<>();
-        sources = new ArrayList<>();
-        destinations = new ArrayList<>();
     }
 }

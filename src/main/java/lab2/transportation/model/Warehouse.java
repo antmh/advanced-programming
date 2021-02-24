@@ -1,9 +1,13 @@
-package lab2;
+package lab2.transportation.model;
 
 /**
  * @author Antonio Mihăeș
  */
 public class Warehouse extends Source {
+    public Warehouse(String name, int supply) {
+        super(name, supply);
+    }
+
     @Override
     public String toString() {
         return "Warehouse [name=" + name + ", supply=" + supply + "]";
@@ -17,9 +21,4 @@ public class Warehouse extends Source {
 
         return ((Warehouse) obj).name.equals(name);
     }
-
-    public Warehouse(String name, int supply) {
-        super(name, supply);
-    }
-
 }
