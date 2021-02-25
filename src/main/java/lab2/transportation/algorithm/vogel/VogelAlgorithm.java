@@ -26,20 +26,13 @@ public class VogelAlgorithm extends Algorithm {
             demandLeft.add(destination.getDemand());
         }
         
-        System.out.println("Supply: " + supplyLeft);
-        System.out.println("Demand: " + demandLeft);
-        
-        int i = 0;
         while (existsDemand(demandLeft)) {
-            System.out.println("Iter: " + i);
-            ++i;
             MatrixCell cell;
             int demandValue;
             int supplyValue;
             int unitsDelivered;
             do {
                 cell = vogelMatrix.getNextCell();
-                System.out.println("Cell: " + cell.getRow() + ", " + cell.getColumn());
                 demandValue = demandLeft.get(cell.getColumn());
                 supplyValue = supplyLeft.get(cell.getRow());
                 unitsDelivered = Math.min(demandValue, supplyValue);
@@ -56,14 +49,12 @@ public class VogelAlgorithm extends Algorithm {
             Source source = problem.getSources().get(cell.getRow());
             Destination destination = problem.getDestinations().get(cell.getColumn());
             solution.addDelivery(source, destination, unitsDelivered);
-            System.out.println();
         }
         
         return solution;
     }
     
     private boolean existsDemand(ArrayList<Integer> demand) {
-        System.out.println("Exits demand: " + demand);
         for (int i : demand) {
             if (i > 0) {
                 return true;

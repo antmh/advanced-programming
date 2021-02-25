@@ -70,10 +70,6 @@ public class Problem {
         }
     }
 
-    public void solveSimple() {
-
-    }
-
     @Override
     public String toString() {
         return "Problem [cost=" + costMatrix + ", sources=" + sources + ", destinations=" + destinations + "]";

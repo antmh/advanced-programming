@@ -37,9 +37,6 @@ class VogelMatrix {
         ArrayList<Integer> columnDifferences = getColumnDifferences();
         ArrayList<Integer> rowDifferences = getRowDifferences();
 
-        System.out.println("Column differences: " + columnDifferences);
-        System.out.println("Row differences: " + rowDifferences);
-
         int maximumDifferenceIndex = -1;
         int maximumValue = -1;
 
@@ -62,8 +59,6 @@ class VogelMatrix {
             }
         }
 
-        System.out.println("Maximum value: " + maximumValue);
-
         int selectedColumn;
         int selectedRow;
         if (isColumnIndex) {
@@ -74,34 +69,6 @@ class VogelMatrix {
             selectedColumn = getMinRowIndex(selectedRow);
         }
         return new MatrixCell(selectedRow, selectedColumn);
-    }
-
-    /**
-     * The Vogel matrix has area available for calculating row differences and
-     * columns differences only when there are at least two columns and two rows.
-     */
-    public boolean hasAreaAvailable() {
-        int canceledRowsNo = 0;
-        for (boolean isCanceled : canceledRows) {
-            if (isCanceled) {
-                ++canceledRowsNo;
-            }
-        }
-        if (canceledRows.length - canceledRowsNo < 2) {
-            return false;
-        }
-
-        int canceledColumnsNo = 0;
-        for (boolean isCanceled : canceledColumns) {
-            if (isCanceled) {
-                ++canceledColumnsNo;
-            }
-        }
-        if (canceledColumns.length - canceledColumnsNo < 2) {
-            return false;
-        }
-
-        return true;
     }
 
     public void cancelRow(int row) {
@@ -125,12 +92,9 @@ class VogelMatrix {
 
     private int getMinRowIndex(int row) {
         int minIndex = -1;
-        System.out.println("getMinRowIndex");
         for (int column = 0; column < costMatrix.get(0).size(); ++column) {
-            System.out.println(costMatrix.get(row).get(column));
             if (!canceledColumns[column]
                     && (minIndex == -1 || costMatrix.get(row).get(minIndex) > costMatrix.get(row).get(column))) {
-                System.out.println("Set: " + costMatrix.get(row).get(column));
                 minIndex = column;
             }
         }
@@ -141,7 +105,6 @@ class VogelMatrix {
         ArrayList<Integer> columnDifferences = new ArrayList<>();
 
         for (int column = 0; column < costMatrix.get(0).size(); ++column) {
-            System.out.println("Get column difference for column " + column);
             if (canceledColumns[column]) {
                 columnDifferences.add(-1);
             } else {
@@ -162,13 +125,11 @@ class VogelMatrix {
                     secondLeastValue = leastValue;
                     leastValue = costMatrix.get(row).get(column);
                 } else if (secondLeastValue == -1 || costMatrix.get(row).get(column) < secondLeastValue) {
-                    System.out.println("Second least value " + row + ", " + column);
                     secondLeastValue = costMatrix.get(row).get(column);
                 }
             }
         }
 
-        System.out.println("Second least: " + secondLeastValue + ", least: " + leastValue);
         return secondLeastValue - leastValue;
     }
 
