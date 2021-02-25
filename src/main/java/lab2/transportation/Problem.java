@@ -8,18 +8,18 @@ import lab2.transportation.model.Source;
  * @author Antonio Mihăeș
  */
 public class Problem {
-    private ArrayList<ArrayList<Integer>> cost;
+    private ArrayList<ArrayList<Integer>> costMatrix;
     private ArrayList<Source> sources;
     private ArrayList<Destination> destinations;
 
     public Problem() {
-        cost = new ArrayList<>();
+        costMatrix = new ArrayList<>();
         sources = new ArrayList<>();
         destinations = new ArrayList<>();
     }
 
-    public final ArrayList<ArrayList<Integer>> getCost() {
-        return cost;
+    public final ArrayList<ArrayList<Integer>> getCostMatrix() {
+        return costMatrix;
     }
 
     public final ArrayList<Source> getSources() {
@@ -31,7 +31,7 @@ public class Problem {
     }
 
     public void setCost(ArrayList<ArrayList<Integer>> cost) {
-        this.cost = cost;
+        this.costMatrix = cost;
     }
 
     public void addSource(Source source, int... destinationCosts) {
@@ -45,9 +45,12 @@ public class Problem {
             throw new IllegalArgumentException("Incorrect number of destination costs");
         }
         sources.add(source);
-        for (int i = 0; i < destinationCosts.length; ++i) {
-            cost.get(i).add(destinationCosts[i]);
+
+        ArrayList<Integer> row = new ArrayList<Integer>();
+        for (int cost : destinationCosts) {
+            row.add(cost);
         }
+        costMatrix.add(row);
     }
 
     public void addDestination(Destination destination, int... sourceCosts) {
@@ -62,19 +65,17 @@ public class Problem {
         }
         destinations.add(destination);
 
-        ArrayList<Integer> row = new ArrayList<Integer>();
-        for (int i : sourceCosts) {
-            row.add(i);
+        for (int i = 0; i < sourceCosts.length; ++i) {
+            costMatrix.get(i).add(sourceCosts[i]);
         }
-        cost.add(row);
     }
-    
+
     public void solveSimple() {
-        
+
     }
 
     @Override
     public String toString() {
-        return "Problem [cost=" + cost + ", sources=" + sources + ", destinations=" + destinations + "]";
+        return "Problem [cost=" + costMatrix + ", sources=" + sources + ", destinations=" + destinations + "]";
     }
 }

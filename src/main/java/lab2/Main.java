@@ -2,7 +2,9 @@ package lab2;
 
 import lab2.transportation.Problem;
 import lab2.transportation.Solution;
+import lab2.transportation.algorithm.Algorithm;
 import lab2.transportation.algorithm.SimpleAlgorithm;
+import lab2.transportation.algorithm.vogel.VogelAlgorithm;
 import lab2.transportation.model.Destination;
 import lab2.transportation.model.Factory;
 import lab2.transportation.model.Warehouse;
@@ -17,9 +19,13 @@ public class Main {
         initializeProblem(problem);
         System.out.println(problem);
 
-        SimpleAlgorithm simpleAlgorithm = new SimpleAlgorithm();
-        Solution solution = simpleAlgorithm.generateSolution(problem);
-        System.out.println(solution);
+        Algorithm algorithm = new SimpleAlgorithm();
+        Solution solution = algorithm.generateSolution(problem);
+        System.out.println("Simple algorithm:\n" + solution);
+
+        algorithm = new VogelAlgorithm();
+        solution = algorithm.generateSolution(problem);
+        System.out.println("Vogel algorithm:\n" + solution);
     }
 
     private static void initializeProblem(Problem problem) {
