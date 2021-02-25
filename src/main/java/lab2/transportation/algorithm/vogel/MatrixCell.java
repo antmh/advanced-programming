@@ -1,5 +1,8 @@
 package lab2.transportation.algorithm.vogel;
 
+/**
+ * @author Antonio Mihăeș
+ */
 class MatrixCell {
     private int row;
     private int column;

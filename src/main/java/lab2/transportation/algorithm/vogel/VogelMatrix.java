@@ -5,6 +5,8 @@ import java.util.ArrayList;
 /**
  * This matrix is used in the Vogel algorithm to calculate the row and column
  * differences and to cancel rows and columns.
+ * 
+ * @author Antonio Mihăeș
  */
 class VogelMatrix {
     private ArrayList<ArrayList<Integer>> costMatrix;
@@ -17,6 +19,11 @@ class VogelMatrix {
         canceledColumns = new boolean[costMatrix.get(0).size()];
     }
 
+    /**
+     * Get the next cell in the cost matrix to be for the next delivery.
+     * 
+     * @return the next cell, this will always be different
+     */
     public MatrixCell getNextCell() {
         MatrixCell availableCell = null;
         int availableCellsNo = 0;
@@ -71,14 +78,32 @@ class VogelMatrix {
         return new MatrixCell(selectedRow, selectedColumn);
     }
 
+    /**
+     * Make it so that a row is not taken into consideration. This should be used
+     * when there is no supply.
+     * 
+     * @param row row to be cancelled
+     */
     public void cancelRow(int row) {
         canceledRows[row] = true;
     }
 
+    /**
+     * Make it so that a column is not taken into consideration. This should be used
+     * when there is no demand.
+     * 
+     * @param column column to be cancelled
+     */
     public void cancelColumn(int column) {
         canceledColumns[column] = true;
     }
 
+    /**
+     * Get the row index in a certain column which has the smallest value.
+     * 
+     * @param column column in which to search
+     * @return the row index of the smallest value
+     */
     private int getMinColumnIndex(int column) {
         int minIndex = -1;
         for (int row = 0; row < costMatrix.size(); ++row) {
@@ -90,6 +115,12 @@ class VogelMatrix {
         return minIndex;
     }
 
+    /**
+     * Get the column index in a certain row which has the smallest value.
+     * 
+     * @param row row in which to search
+     * @return the column index of the smallest value
+     */
     private int getMinRowIndex(int row) {
         int minIndex = -1;
         for (int column = 0; column < costMatrix.get(0).size(); ++column) {
@@ -101,6 +132,11 @@ class VogelMatrix {
         return minIndex;
     }
 
+    /**
+     * Get the differences between the two smallest values for each column.
+     * 
+     * @return the differences for each column
+     */
     private ArrayList<Integer> getColumnDifferences() {
         ArrayList<Integer> columnDifferences = new ArrayList<>();
 
@@ -116,6 +152,12 @@ class VogelMatrix {
         return columnDifferences;
     }
 
+    /**
+     * Get the difference between the two smallest values for a specific column.
+     * 
+     * @param column the column in which to search
+     * @return the difference for the specified column
+     */
     private int getColumnDifference(int column) {
         int leastValue = -1;
         int secondLeastValue = -1;
@@ -133,6 +175,11 @@ class VogelMatrix {
         return secondLeastValue - leastValue;
     }
 
+    /**
+     * Get the differences between the two smallest values for a specific row.
+     * 
+     * @return the differences for each row
+     */
     private ArrayList<Integer> getRowDifferences() {
         ArrayList<Integer> rowDifferences = new ArrayList<>();
 
@@ -148,6 +195,12 @@ class VogelMatrix {
         return rowDifferences;
     }
 
+    /**
+     * Get the difference between the two smallest values for a specific row.
+     * 
+     * @param row the row in which to search
+     * @return the difference for the specified row
+     */
     private int getRowDifference(int row) {
         int leastValue = -1;
         int secondLeastValue = -1;

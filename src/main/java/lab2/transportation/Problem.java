@@ -34,6 +34,15 @@ public class Problem {
         this.costMatrix = cost;
     }
 
+    /**
+     * This method adds a new source. The number of destination costs must be equal
+     * to the number of destinations added previously, otherwise an exception is
+     * thrown.
+     * 
+     * @param source           source to be added
+     * @param destinationCosts destination costs to be used in the cost matrix
+     *                         corresponding to the source
+     */
     public void addSource(Source source, int... destinationCosts) {
         for (Source addedSource : sources) {
             if (source.equals(addedSource)) {
@@ -53,6 +62,14 @@ public class Problem {
         costMatrix.add(row);
     }
 
+    /**
+     * This method adds a new destination. The number of source costs must be equal
+     * to the number of sources added previously, otherwise an exception is thrown.
+     * 
+     * @param destination destination to be added
+     * @param sourceCosts source costs to be used in the cost matrix corresponding
+     *                    to the destination
+     */
     public void addDestination(Destination destination, int... sourceCosts) {
         for (Destination addedDestination : destinations) {
             if (destination.equals(addedDestination)) {

@@ -5,6 +5,9 @@ import lab2.transportation.model.Delivery;
 import lab2.transportation.model.Destination;
 import lab2.transportation.model.Source;
 
+/**
+ * @author Antonio Mihăeș
+ */
 public class Solution {
     private ArrayList<Delivery> deliveries = new ArrayList<Delivery>();
 

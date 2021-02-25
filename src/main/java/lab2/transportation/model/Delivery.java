@@ -1,5 +1,8 @@
 package lab2.transportation.model;
 
+/**
+ * @author Antonio Mihăeș
+ */
 public class Delivery {
     private Source source;
     private Destination destination;

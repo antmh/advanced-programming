@@ -8,14 +8,20 @@ import lab2.transportation.algorithm.Algorithm;
 import lab2.transportation.model.Destination;
 import lab2.transportation.model.Source;
 
+/**
+ * @author Antonio Mihăeș
+ */
 public class VogelAlgorithm extends Algorithm {
+    /**
+     * This method generates a solution by using the Vogel approximation algorithm.
+     */
     @Override
     public Solution generateSolution(Problem problem) {
         Solution solution = new Solution();
-        
+
         ArrayList<ArrayList<Integer>> costMatrix = problem.getCostMatrix();
         VogelMatrix vogelMatrix = new VogelMatrix(costMatrix);
-        
+
         ArrayList<Integer> supplyLeft = new ArrayList<Integer>();
         for (Source source : problem.getSources()) {
             supplyLeft.add(source.getSupply());
@@ -25,7 +31,7 @@ public class VogelAlgorithm extends Algorithm {
         for (Destination destination : problem.getDestinations()) {
             demandLeft.add(destination.getDemand());
         }
-        
+
         while (existsDemand(demandLeft)) {
             MatrixCell cell;
             int demandValue;
@@ -45,15 +51,15 @@ public class VogelAlgorithm extends Algorithm {
             if (supplyLeft.get(cell.getRow()) == 0) {
                 vogelMatrix.cancelRow(cell.getRow());
             }
-            
+
             Source source = problem.getSources().get(cell.getRow());
             Destination destination = problem.getDestinations().get(cell.getColumn());
             solution.addDelivery(source, destination, unitsDelivered);
         }
-        
+
         return solution;
     }
-    
+
     private boolean existsDemand(ArrayList<Integer> demand) {
         for (int i : demand) {
             if (i > 0) {

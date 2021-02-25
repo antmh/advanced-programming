@@ -7,7 +7,16 @@ import lab2.transportation.Solution;
 import lab2.transportation.model.Destination;
 import lab2.transportation.model.Source;
 
+/**
+ * @author Antonio Mihăeș
+ */
 public class SimpleAlgorithm extends Algorithm {
+    /**
+     * This generates a new solution by checking for each destination the first
+     * source that still has some supply left. Note that this solution is not
+     * efficient at all, it just generates a feasible solution and does not take
+     * into account the cost matrix.
+     */
     @Override
     public Solution generateSolution(Problem problem) {
         Solution solution = new Solution();
@@ -29,7 +38,7 @@ public class SimpleAlgorithm extends Algorithm {
                     Source source = sources.get(sourceIndex);
                     Destination destination = destinations.get(destinationIndex);
                     int unitsDelivered = Math.min(demandLeft, supplyLeft.get(sourceIndex));
-                    
+
                     solution.addDelivery(source, destination, unitsDelivered);
                     demandLeft -= unitsDelivered;
                     supplyLeft.set(sourceIndex, supplyLeft.get(sourceIndex) - unitsDelivered);
