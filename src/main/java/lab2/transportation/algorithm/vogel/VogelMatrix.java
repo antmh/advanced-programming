@@ -88,6 +88,32 @@ class VogelMatrix {
         canceledRows[row] = true;
     }
 
+    public boolean isCancelled() {
+        boolean existsAvailableRow = false;
+        for (boolean row : canceledRows) {
+            if (row) {
+                existsAvailableRow = true;
+                break;
+            }
+        }
+        if (!existsAvailableRow) {
+            return true;
+        }
+
+        boolean existsAvailableColumn = false;
+        for (boolean column : canceledColumns) {
+            if (column) {
+                existsAvailableColumn = true;
+                break;
+            }
+        }
+        if (!existsAvailableColumn) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Make it so that a column is not taken into consideration. This should be used
      * when there is no demand.

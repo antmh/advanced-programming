@@ -39,6 +39,9 @@ public class VogelAlgorithm extends Algorithm {
             int unitsDelivered;
             do {
                 cell = vogelMatrix.getNextCell();
+                if (cell.getColumn() < 0 || cell.getRow() < 0) {
+                    return null;
+                }
                 demandValue = demandLeft.get(cell.getColumn());
                 supplyValue = supplyLeft.get(cell.getRow());
                 unitsDelivered = Math.min(demandValue, supplyValue);
@@ -51,6 +54,7 @@ public class VogelAlgorithm extends Algorithm {
             if (supplyLeft.get(cell.getRow()) == 0) {
                 vogelMatrix.cancelRow(cell.getRow());
             }
+
 
             Source source = problem.getSources().get(cell.getRow());
             Destination destination = problem.getDestinations().get(cell.getColumn());
