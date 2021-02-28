@@ -8,6 +8,8 @@ public class Destination {
     private int demand;
 
     public Destination(String name, int demand) {
+        validateDemand(demand);
+        validateName(name);
         this.name = name;
         this.demand = demand;
     }
@@ -21,10 +23,12 @@ public class Destination {
     }
 
     public void setName(String name) {
+        validateName(name);
         this.name = name;
     }
 
     public void setDemand(int demand) {
+        validateDemand(demand);
         this.demand = demand;
     }
 
@@ -40,5 +44,17 @@ public class Destination {
         }
 
         return ((Destination) obj).name.equals(name);
+    }
+
+    private void validateName(String name) {
+        if (name == null || name.equals("")) {
+            throw new IllegalArgumentException("name must not be null or empty");
+        }
+    }
+
+    private void validateDemand(int demand) {
+        if (demand < 0) {
+            throw new IllegalArgumentException("demand must not be negative");
+        }
     }
 }
