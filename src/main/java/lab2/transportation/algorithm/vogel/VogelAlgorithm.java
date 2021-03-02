@@ -1,6 +1,7 @@
 package lab2.transportation.algorithm.vogel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lab2.transportation.Problem;
 import lab2.transportation.Solution;
@@ -19,15 +20,15 @@ public class VogelAlgorithm extends Algorithm {
     public Solution generateSolution(Problem problem) {
         Solution solution = new Solution();
 
-        ArrayList<ArrayList<Integer>> costMatrix = problem.getCostMatrix();
+        List<List<Integer>> costMatrix = problem.getCostMatrix();
         VogelMatrix vogelMatrix = new VogelMatrix(costMatrix);
 
-        ArrayList<Integer> supplyLeft = new ArrayList<Integer>();
+        List<Integer> supplyLeft = new ArrayList<>();
         for (Source source : problem.getSources()) {
             supplyLeft.add(source.getSupply());
         }
 
-        ArrayList<Integer> demandLeft = new ArrayList<Integer>();
+        List<Integer> demandLeft = new ArrayList<>();
         for (Destination destination : problem.getDestinations()) {
             demandLeft.add(destination.getDemand());
         }
@@ -64,7 +65,7 @@ public class VogelAlgorithm extends Algorithm {
         return solution;
     }
 
-    private boolean existsDemand(ArrayList<Integer> demand) {
+    private boolean existsDemand(List<Integer> demand) {
         for (int i : demand) {
             if (i > 0) {
                 return true;

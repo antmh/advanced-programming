@@ -1,6 +1,7 @@
 package lab2.transportation.algorithm.vogel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This matrix is used in the Vogel algorithm to calculate the row and column
@@ -9,11 +10,11 @@ import java.util.ArrayList;
  * @author Antonio Mihăeș
  */
 class VogelMatrix {
-    private ArrayList<ArrayList<Integer>> costMatrix;
+    private List<List<Integer>> costMatrix;
     private boolean[] canceledRows;
     private boolean[] canceledColumns;
 
-    public VogelMatrix(ArrayList<ArrayList<Integer>> costMatrix) {
+    public VogelMatrix(List<List<Integer>> costMatrix) {
         this.costMatrix = costMatrix;
         canceledRows = new boolean[costMatrix.size()];
         canceledColumns = new boolean[costMatrix.get(0).size()];
@@ -41,8 +42,8 @@ class VogelMatrix {
         if (availableCellsNo == 1) {
             return availableCell;
         }
-        ArrayList<Integer> columnDifferences = getColumnDifferences();
-        ArrayList<Integer> rowDifferences = getRowDifferences();
+        List<Integer> columnDifferences = getColumnDifferences();
+        List<Integer> rowDifferences = getRowDifferences();
 
         int maximumDifferenceIndex = -1;
         int maximumValue = -1;
@@ -163,8 +164,8 @@ class VogelMatrix {
      * 
      * @return the differences for each column
      */
-    private ArrayList<Integer> getColumnDifferences() {
-        ArrayList<Integer> columnDifferences = new ArrayList<>();
+    private List<Integer> getColumnDifferences() {
+        List<Integer> columnDifferences = new ArrayList<>();
 
         for (int column = 0; column < costMatrix.get(0).size(); ++column) {
             if (canceledColumns[column]) {
@@ -206,8 +207,8 @@ class VogelMatrix {
      * 
      * @return the differences for each row
      */
-    private ArrayList<Integer> getRowDifferences() {
-        ArrayList<Integer> rowDifferences = new ArrayList<>();
+    private List<Integer> getRowDifferences() {
+        List<Integer> rowDifferences = new ArrayList<>();
 
         for (int row = 0; row < costMatrix.size(); ++row) {
             if (canceledRows[row]) {

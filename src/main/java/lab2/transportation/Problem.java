@@ -1,6 +1,8 @@
 package lab2.transportation;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import lab2.transportation.model.Destination;
 import lab2.transportation.model.Source;
 
@@ -8,9 +10,9 @@ import lab2.transportation.model.Source;
  * @author Antonio Mihăeș
  */
 public class Problem {
-    private ArrayList<ArrayList<Integer>> costMatrix;
-    private ArrayList<Source> sources;
-    private ArrayList<Destination> destinations;
+    private List<List<Integer>> costMatrix;
+    private List<Source> sources;
+    private List<Destination> destinations;
 
     public Problem() {
         costMatrix = new ArrayList<>();
@@ -18,19 +20,19 @@ public class Problem {
         destinations = new ArrayList<>();
     }
 
-    public final ArrayList<ArrayList<Integer>> getCostMatrix() {
+    public final List<List<Integer>> getCostMatrix() {
         return costMatrix;
     }
 
-    public final ArrayList<Source> getSources() {
+    public final List<Source> getSources() {
         return sources;
     }
 
-    public final ArrayList<Destination> getDestinations() {
+    public final List<Destination> getDestinations() {
         return destinations;
     }
 
-    public void setCost(ArrayList<ArrayList<Integer>> cost) {
+    public void setCost(List<List<Integer>> cost) {
         this.costMatrix = cost;
     }
 
@@ -55,7 +57,7 @@ public class Problem {
         }
         sources.add(source);
 
-        ArrayList<Integer> row = new ArrayList<Integer>();
+        List<Integer> row = new ArrayList<>();
         for (int cost : destinationCosts) {
             row.add(cost);
         }

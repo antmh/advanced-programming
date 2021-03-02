@@ -1,6 +1,8 @@
 package lab2.transportation;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import lab2.transportation.model.Delivery;
 import lab2.transportation.model.Destination;
 import lab2.transportation.model.Source;
@@ -9,13 +11,13 @@ import lab2.transportation.model.Source;
  * @author Antonio Mihăeș
  */
 public class Solution {
-    private ArrayList<Delivery> deliveries = new ArrayList<Delivery>();
+    private List<Delivery> deliveries = new ArrayList<>();
 
-    public ArrayList<Delivery> getDeliveries() {
+    public List<Delivery> getDeliveries() {
         return deliveries;
     }
 
-    public void setDeliveries(ArrayList<Delivery> deliveries) {
+    public void setDeliveries(List<Delivery> deliveries) {
         this.deliveries = deliveries;
     }
 

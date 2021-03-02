@@ -1,6 +1,7 @@
 package lab2.transportation.algorithm;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lab2.transportation.Problem;
 import lab2.transportation.Solution;
@@ -21,10 +22,10 @@ public class SimpleAlgorithm extends Algorithm {
     public Solution generateSolution(Problem problem) {
         Solution solution = new Solution();
 
-        ArrayList<Source> sources = problem.getSources();
-        ArrayList<Destination> destinations = problem.getDestinations();
+        List<Source> sources = problem.getSources();
+        List<Destination> destinations = problem.getDestinations();
 
-        ArrayList<Integer> supplyLeft = new ArrayList<Integer>();
+        List<Integer> supplyLeft = new ArrayList<>();
 
         for (Source source : sources) {
             supplyLeft.add(source.getSupply());
