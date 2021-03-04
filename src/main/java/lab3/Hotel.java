@@ -1,37 +1,35 @@
 package lab3;
 
 public class Hotel extends Location implements Payable, Classifiable {
-    private double price;
-    private int rank;
+	private double price;
+	private int rank;
 
-    @Override
-    public double getPrice() {
-        return price;
-    }
+	@Override
+	public double getPrice() {
+		return price;
+	}
 
-    @Override
-    public int getRank() {
-        return rank;
-    }
+	@Override
+	public int getRank() {
+		return rank;
+	}
 
-    @Override
-    public void setPrice(double price) {
-        if (price < 0) {
-            throw new IllegalArgumentException("Price cannot be negative");
-        }
-        this.price = price;
-    }
+	public void setPrice(double price) {
+		if (price < 0) {
+			throw new IllegalArgumentException("Price cannot be negative");
+		}
+		this.price = price;
+	}
 
-    @Override
-    public void setRank(int rank) {
-        if (rank < 0) {
-            throw new IllegalArgumentException("Rank cannot be negative");
-        }
-        this.rank = rank;
-    }
+	public void setRank(int rank) {
+		if (rank < 0) {
+			throw new IllegalArgumentException("Rank cannot be negative");
+		}
+		this.rank = rank;
+	}
 
-    @Override
-    public String toString() {
-        return "Hotel [name=" + getName() + "]";
-    }
+	@Override
+	public String toString() {
+		return "Hotel [name=" + getName() + "]";
+	}
 }
