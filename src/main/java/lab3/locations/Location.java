@@ -35,7 +35,7 @@ public abstract class Location implements Comparable<Location> {
         }
         return cost.get(location);
     }
-    
+
     public Set<Location> getNeighbours() {
         return cost.keySet();
     }
@@ -60,6 +60,16 @@ public abstract class Location implements Comparable<Location> {
 
     public void setCost(Location node, int value) {
         cost.put(node, value);
+    }
+
+    public int getMaximumCost() {
+        int result = -1;
+        for (int locationCost : cost.values()) {
+            if (result == -1 || locationCost > result) {
+                result = locationCost;
+            }
+        }
+        return result;
     }
 
     @Override

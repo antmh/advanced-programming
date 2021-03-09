@@ -11,6 +11,9 @@ import lab3.locations.Museum;
 import lab3.locations.Park;
 import lab3.locations.Rank;
 import lab3.locations.Restaurant;
+import lab3.travel.DailyTravelPlan;
+import lab3.travel.PreferencesTravelPlan;
+import lab3.travel.TravelPlan;
 
 public class Main {
     public static void main(String args[]) {
@@ -80,8 +83,12 @@ public class Main {
         System.out.println(city);
 
         city.displayVisitableNotPayable();
-        
-        TravelPlan travelPlan = new TravelPlan(city, Arrays.asList(hotel, park, church, restaurant));
-        System.out.println(travelPlan.generateShortestItinerary());
+
+        TravelPlan preferencesTravelPlan = new PreferencesTravelPlan(city,
+                Arrays.asList(hotel, park, church, restaurant));
+        System.out.println(preferencesTravelPlan.generateItinerary());
+
+        TravelPlan dailyDravelPlan = new DailyTravelPlan(city, hotel, 5, 3);
+        System.out.println(dailyDravelPlan.generateItinerary());
     }
 }

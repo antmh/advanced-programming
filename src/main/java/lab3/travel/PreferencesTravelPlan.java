@@ -1,4 +1,4 @@
-package lab3;
+package lab3.travel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,11 +11,11 @@ import java.util.Set;
 import lab3.locations.City;
 import lab3.locations.Location;
 
-public class TravelPlan {
+public class PreferencesTravelPlan implements TravelPlan {
     private City city;
-    private Itinerary itinerary;
+    private List<Location> preferences;
 
-    public TravelPlan(City city, List<Location> preferences) {
+    public PreferencesTravelPlan(City city, List<Location> preferences) {
         for (Location location : preferences) {
             if (!city.existsLocation(location)) {
                 throw new IllegalArgumentException(
@@ -24,21 +24,22 @@ public class TravelPlan {
         }
 
         this.city = city;
-        this.itinerary = new Itinerary(preferences);
+        this.preferences = preferences;
     }
 
-    public Itinerary generateShortestItinerary() {
+    @Override
+    public Itinerary generateItinerary() {
         Itinerary result = new Itinerary();
-        Iterator<Location> preferencesIterator = itinerary.getLocations().iterator();
+        Iterator<Location> preferencesIterator = preferences.iterator();
         Location first = preferencesIterator.next();
-        result.addLocation(first);
+        result.addLocation(0, first);
         Location second;
         while (preferencesIterator.hasNext()) {
             second = preferencesIterator.next();
             Iterator<Location> pathIterator = generateSolution(first, second).iterator();
             pathIterator.next();
             while (pathIterator.hasNext()) {
-                result.addLocation(pathIterator.next());
+                result.addLocation(0, pathIterator.next());
             }
             first = second;
         }

@@ -29,6 +29,17 @@ public class City {
         return locations;
     }
 
+    public int getMaximumCost() {
+        int result = -1;
+        for (Location location : locations) {
+            int cost = location.getMaximumCost();
+            if (result == -1 || cost > result) {
+                result = cost;
+            }
+        }
+        return result;
+    }
+
     public final void setName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
