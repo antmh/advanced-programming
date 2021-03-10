@@ -11,10 +11,21 @@ import java.util.Set;
 import lab3.locations.City;
 import lab3.locations.Location;
 
+/**
+ * This travel plan generates an itinerary that visits each given location, in
+ * the order given, using the shortest path possible.
+ */
 public class PreferencesTravelPlan implements TravelPlan {
     private City city;
     private List<Location> preferences;
 
+    /**
+     * Create a travel plan with preferences.
+     * 
+     * @param city        the city to travel
+     * @param preferences the locations to travel, the order of them representing
+     *                    the order in which to visit
+     */
     public PreferencesTravelPlan(City city, List<Location> preferences) {
         for (Location location : preferences) {
             if (!city.existsLocation(location)) {

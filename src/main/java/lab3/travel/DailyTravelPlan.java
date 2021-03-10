@@ -10,12 +10,25 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.tools.ArrayUtils;
 
+/**
+ * This travel plan generates an itinerary that maximises the number of
+ * locations visited, given a start location that has to be returned to each
+ * day, the available time available each day and the number of days available.
+ */
 public class DailyTravelPlan implements TravelPlan {
     private City city;
     private Location start;
     private int availableTime;
     private int daysNo;
 
+    /**
+     * Create a daily travel plan.
+     * 
+     * @param city          the city to travel
+     * @param start         the location where to start and to return to each day
+     * @param availableTime the time available each day
+     * @param daysNo        the number of days available
+     */
     public DailyTravelPlan(City city, Location start, int availableTime, int daysNo) {
         this.city = city;
         this.start = start;
