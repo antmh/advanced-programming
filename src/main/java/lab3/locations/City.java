@@ -30,10 +30,10 @@ public class City {
     }
 
     public int getMaximumCost() {
-        int result = -1;
+        int result = 0;
         for (Location location : locations) {
             int cost = location.getMaximumCost();
-            if (result == -1 || cost > result) {
+            if (cost > result) {
                 result = cost;
             }
         }

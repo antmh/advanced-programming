@@ -22,6 +22,10 @@ public class Itinerary {
         }
         days.get(day).add(location);
     }
+    
+    public int getDaysNo() {
+        return days.size();
+    }
 
     public final List<Location> getDay(int day) {
         return days.get(day);

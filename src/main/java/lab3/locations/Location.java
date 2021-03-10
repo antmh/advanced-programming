@@ -33,7 +33,7 @@ public abstract class Location implements Comparable<Location> {
         if (location == null) {
             throw new IllegalArgumentException("location must not be null");
         }
-        return cost.get(location);
+        return cost.getOrDefault(location, Integer.MAX_VALUE);
     }
 
     public Set<Location> getNeighbours() {
