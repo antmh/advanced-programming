@@ -17,7 +17,7 @@ import org.chocosolver.util.tools.ArrayUtils;
  */
 public class DailyTravelPlan implements TravelPlan {
     private City city;
-    private Location start;
+    private int startIndex;
     private int availableTime;
     private int daysNo;
 
@@ -31,13 +31,27 @@ public class DailyTravelPlan implements TravelPlan {
      */
     public DailyTravelPlan(City city, Location start, int availableTime, int daysNo) {
         this.city = city;
-        this.start = start;
+        this.startIndex = city.getLocations().indexOf(start);
         this.availableTime = availableTime;
         this.daysNo = daysNo;
     }
 
     @Override
     public Itinerary generateItinerary() {
+        Itinerary itinerary = new Itinerary();
+        int next[][] = generateNext();
+        for (int day = 0; day < daysNo; ++day) {
+            int current = startIndex;
+            do {
+                itinerary.addLocation(day, city.getLocations().get(current));
+                current = next[day][current];
+            } while (current != startIndex);
+            itinerary.addLocation(day, city.getLocations().get(current));
+        }
+        return itinerary;
+    }
+
+    private int[][] generateNext() {
         Model model = new Model();
         int locationsNo = city.getLocations().size();
         int maximumCost = city.getMaximumCost();
@@ -47,7 +61,6 @@ public class DailyTravelPlan implements TravelPlan {
         IntVar[] dayLocationsNo = model.intVarArray(daysNo, 0, locationsNo);
         BoolVar[][] dayLocationVisited = model.boolVarMatrix(daysNo, locationsNo);
         BoolVar[] locationVisited = model.boolVarArray(locationsNo);
-        int startIndex = city.getLocations().indexOf(start);
 
         for (int day = 0; day < daysNo; ++day) {
             Constraint isCircuitValid = model.arithm(next[day][startIndex], "!=", startIndex);
@@ -80,20 +93,14 @@ public class DailyTravelPlan implements TravelPlan {
         model.sum(locationVisited, "=", visitedLocationsNo).post();
         model.setObjective(Model.MAXIMIZE, visitedLocationsNo);
         Solver solver = model.getSolver();
-
-        Itinerary result = null;
+        int[][] result = new int[daysNo][locationsNo];
         while (solver.solve()) {
-            result = new Itinerary();
             for (int day = 0; day < daysNo; ++day) {
-                int current = startIndex;
-                do {
-                    result.addLocation(day, city.getLocations().get(current));
-                    current = next[day][current].getValue();
-                } while (current != startIndex);
-                result.addLocation(day, city.getLocations().get(current));
+                for (int location = 0; location < locationsNo; ++location) {
+                    result[day][location] = next[day][location].getValue();
+                }
             }
         }
         return result;
     }
-
 }
