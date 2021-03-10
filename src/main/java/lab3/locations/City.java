@@ -21,11 +21,23 @@ public class City {
         this.name = name;
     }
 
-    public final String getName() {
+    public String getName() {
         return name;
     }
+    
+    public Location getLocation(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        for (Location location : locations) {
+            if (location.getName().equals(name)) {
+                return location;
+            }
+        }
+        return null;
+    }
 
-    public final List<Location> getLocations() {
+    public List<Location> getLocations() {
         return locations;
     }
 
@@ -40,7 +52,7 @@ public class City {
         return result;
     }
 
-    public final void setName(String name) {
+    public void setName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
         }
