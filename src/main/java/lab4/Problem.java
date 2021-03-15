@@ -69,4 +69,9 @@ public class Problem {
         schoolPreferences.keySet().stream().filter(school -> schoolPreferences.get(school).indexOf(student) == 0)
                 .forEach(school -> System.out.println(school));
     }
+
+    @Override
+    public String toString() {
+        return "Problem [studentPreferences=" + studentPreferences + ", schoolPreferences=" + schoolPreferences + "]";
+    }
 }

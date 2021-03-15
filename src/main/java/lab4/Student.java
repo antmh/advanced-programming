@@ -4,12 +4,12 @@ public class Student {
     private String firstName;
     private String lastName;
 
-    Student() {
+    public Student() {
         firstName = "";
         lastName = "";
     }
 
-    Student(String firstName, String lastName) {
+    public Student(String firstName, String lastName) {
         validateName(firstName);
         validateName(lastName);
         this.firstName = firstName;

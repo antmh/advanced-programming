@@ -2,23 +2,42 @@ package lab4;
 
 public class School implements Comparable<School> {
     private String name;
+    private int capacity;
 
-    School() {
+    public School() {
         name = "";
+        capacity = 0;
     }
 
-    School(String name) {
+    public School(String name, int capacity) {
         validateName(name);
+        validateCapacity(capacity);
         this.name = name;
+        this.capacity = capacity;
+    }
+
+    public final int getCapacity() {
+        return capacity;
     }
 
     public String getName() {
         return name;
     }
 
+    public final void setCapacity(int capacity) {
+        validateCapacity(capacity);
+        this.capacity = capacity;
+    }
+
     public void setName(String name) {
         validateName(name);
         this.name = name;
+    }
+
+    private void validateCapacity(int capacity) {
+        if (capacity < 0) {
+            throw new IllegalArgumentException("Capacity cannot be negative");
+        }
     }
 
     private void validateName(String name) {
@@ -37,6 +56,6 @@ public class School implements Comparable<School> {
 
     @Override
     public String toString() {
-        return "School [name=" + name + "]";
+        return "School [name=" + name + ", capacity=" + capacity + "]";
     }
 }
