@@ -21,7 +21,8 @@ public class PreferencesExample {
     private static Map<School, List<Student>> schoolPreferences;
 
     static {
-        List<Student> students = IntStream.rangeClosed(1, 3).mapToObj(i -> new Student("firstName" + i, "lastName" + i))
+        List<Student> students = IntStream.rangeClosed(1, 3)
+                .mapToObj(i -> new Student("firstName" + i, "lastName" + i, i))
                 .sorted(Comparator.comparing(Student::getFirstName).reversed())
                 .collect(Collectors.toCollection(LinkedList::new));
 

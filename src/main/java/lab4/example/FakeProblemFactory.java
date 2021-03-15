@@ -44,17 +44,18 @@ public class FakeProblemFactory {
         List<Student> students = new ArrayList<>(studentsNo);
         for (int i = 0; i < studentsNo; ++i) {
             var name = faker.name();
-            students.add(new Student(name.firstName(), name.lastName()));
+            int score = faker.number().numberBetween(0, 100);
+            students.add(new Student(name.firstName(), name.lastName(), score));
         }
         return students;
     }
-    
+
     private static List<School> getSchools() {
         int schoolsNo = faker.number().numberBetween(1, 5);
         List<School> schools = new ArrayList<>(schoolsNo);
         for (int i = 0; i < schoolsNo; ++i) {
             var university = faker.university().name();
-            var capacity = faker.number().numberBetween(0, 10);
+            int capacity = faker.number().numberBetween(0, 10);
             schools.add(new School(university, capacity));
         }
         return schools;
