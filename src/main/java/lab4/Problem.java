@@ -1,9 +1,11 @@
 package lab4;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Problem {
     private Map<Student, List<School>> studentPreferences;
@@ -12,6 +14,28 @@ public class Problem {
     public Problem() {
         studentPreferences = new HashMap<>();
         schoolPreferences = new HashMap<>();
+    }
+
+    public Set<School> getSchools() {
+        return Collections.unmodifiableSet(schoolPreferences.keySet());
+    }
+
+    public Set<Student> getStudents() {
+        return Collections.unmodifiableSet(studentPreferences.keySet());
+    }
+
+    public List<School> getPreferredSchools(Student student) {
+        if (!studentPreferences.containsKey(student)) {
+            throw new IllegalArgumentException("Student is not part of the problem");
+        }
+        return studentPreferences.get(student);
+    }
+
+    public List<Student> getPreferredStudents(School school) {
+        if (!schoolPreferences.containsKey(school)) {
+            throw new IllegalArgumentException("School is not part of the problem");
+        }
+        return schoolPreferences.get(school);
     }
 
     public void addStudent(Student student) {
