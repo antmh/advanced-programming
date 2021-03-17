@@ -23,6 +23,9 @@ public class Preferences<T> {
     }
 
     public boolean contains(T element) {
+        if (element == null) {
+            throw new IllegalArgumentException("Element cannot be null");
+        }
         for (var set : prioritisedValues.values()) {
             if (set.contains(element)) {
                 return true;
@@ -41,6 +44,9 @@ public class Preferences<T> {
     }
 
     public int getPriorityOf(T element) {
+        if (element == null) {
+            throw new IllegalArgumentException("Element cannot be null");
+        }
         for (var priority : prioritisedValues.keySet()) {
             if (prioritisedValues.get(priority).contains(element)) {
                 return priority;
@@ -61,6 +67,9 @@ public class Preferences<T> {
     }
 
     public void add(T element, int priority) {
+        if (element == null) {
+            throw new IllegalArgumentException("Element cannot be null");
+        }
         if (priority < 0) {
             throw new IllegalArgumentException("Priority cannot be negative");
         }

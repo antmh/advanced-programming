@@ -1,6 +1,5 @@
 package lab4;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,18 +23,18 @@ public class Problem {
         return Collections.unmodifiableSet(studentPreferences.keySet());
     }
 
-    public Collection<School> getPreferredSchools(Student student) {
+    public Preferences<School> getStudentPreferences(Student student) {
         if (!studentPreferences.containsKey(student)) {
             throw new IllegalArgumentException("Student is not part of the problem");
         }
-        return studentPreferences.get(student).getAll();
+        return studentPreferences.get(student);
     }
 
-    public Collection<Student> getPreferredStudents(School school) {
+    public Preferences<Student> getSchoolPreferences(School school) {
         if (!schoolPreferences.containsKey(school)) {
             throw new IllegalArgumentException("School is not part of the problem");
         }
-        return schoolPreferences.get(school).getAll();
+        return schoolPreferences.get(school);
     }
 
     public void addStudent(Student student) {

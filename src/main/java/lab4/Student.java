@@ -10,6 +10,14 @@ public class Student {
         lastName = "";
         score = 0;
     }
+    
+    public Student(String firstName, String lastName) {
+        validateName(firstName);
+        validateName(lastName);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        score = 0;
+    }
 
     public Student(String firstName, String lastName, int score) {
         validateName(firstName);

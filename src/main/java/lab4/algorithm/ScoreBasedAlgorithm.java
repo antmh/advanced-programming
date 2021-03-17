@@ -10,25 +10,26 @@ import lab4.Solution;
 import lab4.Student;
 
 public class ScoreBasedAlgorithm implements Algorithm {
-
     @Override
     public Solution solve(Problem problem) {
         List<Student> studentsByScore = problem.getStudents().stream()
                 .sorted(Comparator.comparing(Student::getScore).reversed())
                 .collect(Collectors.toCollection(ArrayList::new));
         var solution = new Solution();
-        for (var school : problem.getSchools()) {
-            solution.addSchool(school);
-        }
         for (var student : studentsByScore) {
-            for (var preferredSchool : problem.getPreferredSchools(student)) {
-                if (preferredSchool.getCapacity() > solution.getStudentsOfSchool(preferredSchool).size()) {
+            for (var preferredSchool : problem.getStudentPreferences(student).getAll()) {
+                if (!solution.hasSchool(preferredSchool) && preferredSchool.getCapacity() > 0) {
+                    solution.addSchool(preferredSchool);
                     solution.addStudentToSchool(preferredSchool, student);
                     break;
+                } else if (solution.hasSchool(preferredSchool)) {
+                    if (preferredSchool.getCapacity() > solution.getStudentsOfSchool(preferredSchool).size()) {
+                        solution.addStudentToSchool(preferredSchool, student);
+                        break;
+                    }
                 }
             }
         }
         return solution;
     }
-
 }
