@@ -23,7 +23,7 @@ public class FakeProblemFactory {
             Collections.shuffle(schools);
             for (var school : schools) {
                 if (faker.bool().bool()) {
-                    problem.addStudentPreference(student, school);
+                    problem.addStudentPreference(student, school, faker.number().numberBetween(0, 10));
                 }
             }
         }
@@ -32,7 +32,7 @@ public class FakeProblemFactory {
             Collections.shuffle(students);
             for (var student : students) {
                 if (faker.bool().bool()) {
-                    problem.addSchoolPreference(school, student);
+                    problem.addSchoolPreference(school, student, faker.number().numberBetween(0, 10));
                 }
             }
         }

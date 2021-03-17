@@ -1,6 +1,6 @@
 package lab4;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class Problem {
-    private Map<Student, List<School>> studentPreferences;
-    private Map<School, List<Student>> schoolPreferences;
+    private Map<Student, Preferences<School>> studentPreferences;
+    private Map<School, Preferences<Student>> schoolPreferences;
 
     public Problem() {
         studentPreferences = new HashMap<>();
@@ -24,18 +24,18 @@ public class Problem {
         return Collections.unmodifiableSet(studentPreferences.keySet());
     }
 
-    public List<School> getPreferredSchools(Student student) {
+    public Collection<School> getPreferredSchools(Student student) {
         if (!studentPreferences.containsKey(student)) {
             throw new IllegalArgumentException("Student is not part of the problem");
         }
-        return studentPreferences.get(student);
+        return studentPreferences.get(student).getAll();
     }
 
-    public List<Student> getPreferredStudents(School school) {
+    public Collection<Student> getPreferredStudents(School school) {
         if (!schoolPreferences.containsKey(school)) {
             throw new IllegalArgumentException("School is not part of the problem");
         }
-        return schoolPreferences.get(school);
+        return schoolPreferences.get(school).getAll();
     }
 
     public void addStudent(Student student) {
@@ -45,10 +45,10 @@ public class Problem {
         if (studentPreferences.containsKey(student)) {
             throw new IllegalArgumentException("Student was already added");
         }
-        studentPreferences.put(student, new ArrayList<>());
+        studentPreferences.put(student, new Preferences<>());
     }
 
-    public void addStudentPreference(Student student, School school) {
+    public void addStudentPreference(Student student, School school, int priority) {
         if (school == null) {
             throw new IllegalArgumentException("School must not be null");
         }
@@ -58,7 +58,7 @@ public class Problem {
         if (!studentPreferences.containsKey(student)) {
             throw new IllegalArgumentException("Student was not added");
         }
-        studentPreferences.get(student).add(school);
+        studentPreferences.get(student).add(school, priority);
     }
 
     public void addSchool(School school) {
@@ -68,10 +68,10 @@ public class Problem {
         if (schoolPreferences.containsKey(school)) {
             throw new IllegalArgumentException("School was already added");
         }
-        schoolPreferences.put(school, new ArrayList<>());
+        schoolPreferences.put(school, new Preferences<>());
     }
 
-    public void addSchoolPreference(School school, Student student) {
+    public void addSchoolPreference(School school, Student student, int priority) {
         if (school == null) {
             throw new IllegalArgumentException("School must not be null");
         }
@@ -81,17 +81,20 @@ public class Problem {
         if (!schoolPreferences.containsKey(school)) {
             throw new IllegalArgumentException("student was not added");
         }
-        schoolPreferences.get(school).add(student);
+        schoolPreferences.get(school).add(student, priority);
     }
 
     public void displayStudentsPreferring(List<School> schools) {
-        studentPreferences.keySet().stream().filter(student -> studentPreferences.get(student).containsAll(schools))
+        studentPreferences.keySet().stream()
+                .filter(student -> studentPreferences.get(student).getAll().containsAll(schools))
                 .forEach(student -> System.out.println(student));
     }
 
     public void displaySchoolsPreferring(Student student) {
-        schoolPreferences.keySet().stream().filter(school -> schoolPreferences.get(school).indexOf(student) == 0)
-                .forEach(school -> System.out.println(school));
+        schoolPreferences.keySet().stream().filter(school -> {
+            var preferences = schoolPreferences.get(school);
+            return !preferences.isEmpty() && preferences.getPriorityOf(student) == preferences.getHighestPriority();
+        }).forEach(school -> System.out.println(school));
     }
 
     @Override
