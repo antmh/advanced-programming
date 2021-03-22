@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import lab5.items.Item;
+
 public class Catalog {
     private List<Item> items;
 

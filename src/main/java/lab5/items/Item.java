@@ -1,8 +1,10 @@
-package lab5;
+package lab5.items;
 
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import lab5.InaccessiblePathException;
 
 public abstract class Item implements Serializable {
     protected String name;

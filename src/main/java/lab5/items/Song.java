@@ -1,6 +1,8 @@
-package lab5;
+package lab5.items;
 
 import java.io.Serializable;
+
+import lab5.InaccessiblePathException;
 
 public class Song extends Item implements Serializable {
     private String artist;

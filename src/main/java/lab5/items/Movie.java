@@ -1,4 +1,6 @@
-package lab5;
+package lab5.items;
+
+import lab5.InaccessiblePathException;
 
 public class Movie extends Item {
     private String director;
