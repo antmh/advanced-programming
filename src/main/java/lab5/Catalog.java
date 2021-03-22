@@ -1,6 +1,7 @@
 package lab5;
 
 import java.awt.Desktop;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 
 import lab5.items.Item;
 
@@ -23,7 +27,7 @@ public class Catalog {
             throw new NullPointerException("Item cannot be null");
         }
         for (var addedItem : items) {
-            if (item.getName() == addedItem.getName()) {
+            if (item.getName().equals(addedItem.getName())) {
                 throw new NameAlreadyExistsException(item.getName());
             }
         }
@@ -96,6 +100,40 @@ public class Catalog {
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new InvalidCatalogException();
+        }
+    }
+
+    public void report() throws InaccessiblePathException, UnableToPlayException {
+        Velocity.init();
+        var context = new VelocityContext();
+        context.put("items", items);
+        var path = Paths.get("report.html");
+        try {
+            Files.deleteIfExists(path);
+            Files.createFile(path);
+            try (var fileStream = Files.newOutputStream(path)) {
+                var writer = new FileWriter(path.toString());
+                Velocity.evaluate(context, writer, "string", """
+                        <html>
+                            <body>
+                                <ol>
+                                #foreach( $item in $items )
+                                    <li><a href="file://$item.getPath()">$item.getName()</a></li>
+                                #end
+                                </ol>
+                            </body>
+                        </html>
+                        """);
+                writer.flush();
+                writer.close();
+            }
+        } catch (IOException e) {
+            throw new InaccessiblePathException(path.toString());
+        }
+        try {
+            Desktop.getDesktop().open(path.toFile());
+        } catch (IOException e) {
+            throw new UnableToPlayException("report");
         }
     }
 }

@@ -21,5 +21,10 @@
             <artifactId>javafaker</artifactId>
             <version>1.0.2</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+            </dependency>
+        </dependencies>
 </project>

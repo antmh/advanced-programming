@@ -7,6 +7,7 @@ import lab5.commands.Command;
 import lab5.commands.ListCommand;
 import lab5.commands.LoadCommand;
 import lab5.commands.PlayCommand;
+import lab5.commands.ReportCommand;
 import lab5.commands.SaveCommand;
 import lab5.items.MovieFactory;
 import lab5.items.SongFactory;
@@ -20,7 +21,8 @@ public class Main {
                 new ListCommand(),
                 new LoadCommand(),
                 new PlayCommand(),
-                new SaveCommand()
+                new SaveCommand(),
+                new ReportCommand()
         };
         mainLoop: while (true) {
             var input = scanner.nextLine().trim();
