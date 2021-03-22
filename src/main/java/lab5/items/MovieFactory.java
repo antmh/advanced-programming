@@ -11,8 +11,8 @@ public class MovieFactory extends ItemFactory {
     public Optional<Item> create(String name, String path, String info) throws CatalogException {
         var pattern = Pattern.compile("(?<director>[^\\s]+)");
         var matcher = pattern.matcher(info);
-        var director = matcher.group("director");
         if (matcher.matches()) {
+            var director = matcher.group("director");
             if (matcher.matches()) {
                 return Optional.of(new Movie(name, path, director));
             }
