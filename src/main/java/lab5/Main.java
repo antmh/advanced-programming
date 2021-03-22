@@ -24,7 +24,7 @@ public class Main {
                 new SaveCommand(),
                 new ReportCommand()
         };
-        mainLoop: while (true) {
+        MAIN_LOOP: while (true) {
             var input = scanner.nextLine().trim();
             if (input.equals("quit")) {
                 break;
@@ -32,7 +32,7 @@ public class Main {
             for (var command : commands) {
                 try {
                     if (command.execute(catalog, input)) {
-                        continue mainLoop;
+                        continue MAIN_LOOP;
                     }
                 } catch (CatalogException e) {
                     System.err.println(e.getMessage());
