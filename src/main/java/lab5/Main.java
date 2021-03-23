@@ -9,6 +9,7 @@ import lab5.commands.LoadCommand;
 import lab5.commands.PlayCommand;
 import lab5.commands.ReportCommand;
 import lab5.commands.SaveCommand;
+import lab5.items.BookFactory;
 import lab5.items.MovieFactory;
 import lab5.items.SongFactory;
 
@@ -17,7 +18,7 @@ public class Main {
         var catalog = new Catalog();
         var scanner = new Scanner(System.in);
         Command[] commands = { 
-                new AddCommand(new MovieFactory(), new SongFactory()),
+                new AddCommand(new MovieFactory(), new SongFactory(), new BookFactory()),
                 new ListCommand(),
                 new LoadCommand(),
                 new PlayCommand(),
