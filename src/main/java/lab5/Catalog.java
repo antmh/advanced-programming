@@ -24,7 +24,7 @@ public class Catalog {
 
     public void add(Item item) throws NameAlreadyExistsException {
         if (item == null) {
-            throw new NullPointerException("Item cannot be null");
+            throw new IllegalArgumentException("Item cannot be null");
         }
         for (var addedItem : items) {
             if (item.getName().equals(addedItem.getName())) {
@@ -46,7 +46,7 @@ public class Catalog {
 
     public void play(String name) throws UnableToPlayException, InexistentItemException {
         if (name == null) {
-            throw new NullPointerException("Name cannot be null");
+            throw new IllegalArgumentException("Name cannot be null");
         }
         for (var item : items) {
             if (item.getName().equals(name)) {
@@ -67,7 +67,7 @@ public class Catalog {
 
     public void save(String name) throws InaccessiblePathException {
         if (name == null) {
-            throw new NullPointerException("Name cannot be null");
+            throw new IllegalArgumentException("Name cannot be null");
         }
         var path = Paths.get(name);
         if (Files.exists(path)) {
@@ -87,7 +87,7 @@ public class Catalog {
 
     public void load(String name) throws InvalidCatalogException {
         if (name == null) {
-            throw new NullPointerException("Name cannot be null");
+            throw new IllegalArgumentException("Name cannot be null");
         }
         var path = Paths.get(name);
         try (var fileStream = Files.newInputStream(path); var objectStream = new ObjectInputStream(fileStream)) {
@@ -134,6 +134,21 @@ public class Catalog {
             Desktop.getDesktop().open(path.toFile());
         } catch (IOException e) {
             throw new UnableToPlayException("report");
+        }
+    }
+
+    public void info(String name)throws InexistentItemException, InaccessiblePathException, ParseException {
+        if (name == null) {
+            throw new IllegalArgumentException("name cannot be null");
+        }
+        for (var item : items) {
+            if (item.getName().equals(name)) {
+                var metadata = item.getMetadata();
+                for (var prop : metadata.names()) {
+                    System.out.println(prop + ": " + metadata.get(prop));
+                }
+                return;
+            }
         }
     }
 }

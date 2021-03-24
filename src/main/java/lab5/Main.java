@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import lab5.commands.AddCommand;
 import lab5.commands.Command;
+import lab5.commands.InfoCommand;
 import lab5.commands.ListCommand;
 import lab5.commands.LoadCommand;
 import lab5.commands.PlayCommand;
@@ -23,7 +24,8 @@ public class Main {
                 new LoadCommand(),
                 new PlayCommand(),
                 new SaveCommand(),
-                new ReportCommand()
+                new ReportCommand(),
+                new InfoCommand()
         };
         MAIN_LOOP: while (true) {
             var input = scanner.nextLine().trim();

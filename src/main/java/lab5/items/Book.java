@@ -9,7 +9,7 @@ public class Book extends Item {
     public Book(String name, String path, String author, String genre) throws InaccessiblePathException {
         super(name, path);
         if (author == null) {
-            throw new NullPointerException("author cannot be null");
+            throw new IllegalArgumentException("author cannot be null");
         }
         this.author = author;
         this.genre = genre;

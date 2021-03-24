@@ -8,7 +8,7 @@ public class Movie extends Item {
     public Movie(String name, String path, String director) throws InaccessiblePathException {
         super(name, path);
         if (director == null) {
-            throw new NullPointerException("director cannot be null");
+            throw new IllegalArgumentException("director cannot be null");
         }
         this.director = director;
     }

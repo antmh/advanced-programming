@@ -10,7 +10,7 @@ public class Song extends Item implements Serializable {
     public Song(String name, String path, String artist) throws InaccessiblePathException {
         super(name, path);
         if (artist == null) {
-            throw new NullPointerException("director cannot be null");
+            throw new IllegalArgumentException("director cannot be null");
         }
         this.artist = artist;
     }
