@@ -2,6 +2,7 @@ package lab6;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.imageio.ImageIO;
@@ -15,9 +16,11 @@ import javafx.stage.FileChooser;
 
 public class ControlPanel extends HBox {
     private Supplier<BufferedImage> imageSupplier;
+    private Consumer<BufferedImage> imageConsumer;
 
     public ControlPanel() {
         var loadButton = new Button("Load");
+        loadButton.setOnAction(this::load);
         var saveButton = new Button("Save");
         saveButton.setOnAction(this::save);
         var resetButton = new Button("Reset");
@@ -38,11 +41,32 @@ public class ControlPanel extends HBox {
             alert.show();
         }
     }
+    
+    private void load(ActionEvent event) {
+        var fileChooser = new FileChooser();
+        fileChooser.setTitle("Load");
+        var window = getScene().getWindow();
+        var file = fileChooser.showOpenDialog(window);
+        try {
+            var image = ImageIO.read(file);
+            imageConsumer.accept(image);
+        } catch (IOException e) {
+            var alert = new Alert(AlertType.ERROR, "Could not load image");
+            alert.show();
+        }
+    }
 
     public void setImageSupplier(Supplier<BufferedImage> imageSupplier) {
         if (imageSupplier == null) {
             throw new IllegalArgumentException("imageSupplier cannot be null");
         }
         this.imageSupplier = imageSupplier;
+    }
+
+    public final void setImageConsumer(Consumer<BufferedImage> imageConsumer) {
+        if (imageConsumer == null) {
+            throw new IllegalArgumentException("imageConsumer cannot be null");
+        }
+        this.imageConsumer = imageConsumer;
     }
 }

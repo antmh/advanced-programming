@@ -35,6 +35,12 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         snapshot(null, writableImage);
         return SwingFXUtils.fromFXImage(writableImage, null);
     }
+    
+    public void setImage(BufferedImage image) {
+        var context = getGraphicsContext2D();
+        var fxImage = SwingFXUtils.toFXImage(image, null);
+        context.drawImage(fxImage, 0, 0);
+    }
 
     public ReadOnlyObjectProperty<Integer> getShapeWidth() {
         return shapeWidth;

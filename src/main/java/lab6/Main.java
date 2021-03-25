@@ -26,6 +26,7 @@ public class Main extends Application {
         
         var controlPanel = new ControlPanel();
         controlPanel.setImageSupplier(canvas::getImage);
+        controlPanel.setImageConsumer(canvas::setImage);
 
         var vbox = new VBox(configurationPanel, scrollPane, controlPanel);
         vbox.setSpacing(10);
