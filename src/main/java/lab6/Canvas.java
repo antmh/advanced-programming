@@ -1,6 +1,10 @@
 package lab6;
 
+import java.awt.image.BufferedImage;
+
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -8,9 +12,11 @@ public class Canvas extends javafx.scene.canvas.Canvas {
     private ReadOnlyObjectProperty<Integer> shapeWidth;
     private ReadOnlyObjectProperty<Integer> shapeHeight;
     private ReadOnlyObjectProperty<Color> shapeColor;
+    private static final int WIDTH = 1000;
+    private static final int HEIGHT = 1000;
 
     public Canvas() {
-        super(1000, 1000);
+        super(WIDTH, HEIGHT);
         setOnMouseClicked(this::mouseClicked);
     }
 
@@ -22,6 +28,12 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         var width = shapeWidth.get();
         var height = shapeHeight.get();
         context.fillRect(x - width / 2, y - height / 2, width, height);
+    }
+
+    public BufferedImage getImage() {
+        var writableImage = new WritableImage(WIDTH, HEIGHT);
+        snapshot(null, writableImage);
+        return SwingFXUtils.fromFXImage(writableImage, null);
     }
 
     public ReadOnlyObjectProperty<Integer> getShapeWidth() {
@@ -56,5 +68,4 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         }
         this.shapeColor = shapeColor;
     }
-
 }

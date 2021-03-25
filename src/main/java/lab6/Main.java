@@ -21,11 +21,13 @@ public class Main extends Application {
         canvas.setShapeWidth(configurationPanel.getWidthProperty());
         canvas.setShapeHeight(configurationPanel.getHeightProperty());
         canvas.setShapeColor(configurationPanel.getColorProperty());
-
         var scrollPane = new ScrollPane(canvas);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        
+        var controlPanel = new ControlPanel();
+        controlPanel.setImageSupplier(canvas::getImage);
 
-        var vbox = new VBox(configurationPanel, scrollPane);
+        var vbox = new VBox(configurationPanel, scrollPane, controlPanel);
         vbox.setSpacing(10);
         return vbox;
     }
