@@ -23,10 +23,11 @@ public class Main extends Application {
         canvas.setShapeColor(configurationPanel.getColorProperty());
         var scrollPane = new ScrollPane(canvas);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
-        
+
         var controlPanel = new ControlPanel();
         controlPanel.setImageSupplier(canvas::getImage);
         controlPanel.setImageConsumer(canvas::setImage);
+        controlPanel.setOnReset((event) -> canvas.reset());
 
         var vbox = new VBox(configurationPanel, scrollPane, controlPanel);
         vbox.setSpacing(10);

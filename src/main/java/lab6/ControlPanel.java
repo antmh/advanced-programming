@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import javax.imageio.ImageIO;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
@@ -17,18 +18,19 @@ import javafx.stage.FileChooser;
 public class ControlPanel extends HBox {
     private Supplier<BufferedImage> imageSupplier;
     private Consumer<BufferedImage> imageConsumer;
+    private Button resetButton;
 
     public ControlPanel() {
         var loadButton = new Button("Load");
         loadButton.setOnAction(this::load);
         var saveButton = new Button("Save");
         saveButton.setOnAction(this::save);
-        var resetButton = new Button("Reset");
+        resetButton = new Button("Reset");
         var exitButton = new Button("Exit");
         setSpacing(10);
         getChildren().addAll(loadButton, saveButton, resetButton, exitButton);
     }
-    
+
     private void save(ActionEvent event) {
         var fileChooser = new FileChooser();
         fileChooser.setTitle("Save");
@@ -41,7 +43,7 @@ public class ControlPanel extends HBox {
             alert.show();
         }
     }
-    
+
     private void load(ActionEvent event) {
         var fileChooser = new FileChooser();
         fileChooser.setTitle("Load");
@@ -63,10 +65,17 @@ public class ControlPanel extends HBox {
         this.imageSupplier = imageSupplier;
     }
 
-    public final void setImageConsumer(Consumer<BufferedImage> imageConsumer) {
+    public void setImageConsumer(Consumer<BufferedImage> imageConsumer) {
         if (imageConsumer == null) {
             throw new IllegalArgumentException("imageConsumer cannot be null");
         }
         this.imageConsumer = imageConsumer;
+    }
+
+    public final void setOnReset(EventHandler<ActionEvent> onReset) {
+        if (onReset == null) {
+            throw new IllegalArgumentException("onReset cannot be null");
+        }
+        resetButton.setOnAction(onReset);
     }
 }
