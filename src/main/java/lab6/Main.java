@@ -1,6 +1,7 @@
 package lab6;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -28,6 +29,7 @@ public class Main extends Application {
         controlPanel.setImageSupplier(canvas::getImage);
         controlPanel.setImageConsumer(canvas::setImage);
         controlPanel.setOnReset((event) -> canvas.reset());
+        controlPanel.setOnExit((event) -> Platform.exit());
 
         var vbox = new VBox(configurationPanel, scrollPane, controlPanel);
         vbox.setSpacing(10);
@@ -39,5 +41,4 @@ public class Main extends Application {
         stage.setScene(new Scene(createContent(), 500, 500));
         stage.show();
     }
-
 }
