@@ -1,15 +1,13 @@
 package lab6;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class Canvas extends javafx.scene.canvas.Canvas {
     private ReadOnlyObjectProperty<Integer> shapeWidth;
     private ReadOnlyObjectProperty<Integer> shapeHeight;
-    private ObjectProperty<Color> shapeColor;
+    private ReadOnlyObjectProperty<Color> shapeColor;
 
     public Canvas() {
         super(1000, 1000);
@@ -34,7 +32,7 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         return shapeHeight;
     }
 
-    public final ObjectProperty<Color> getShapeColor() {
+    public final ReadOnlyObjectProperty<Color> getShapeColor() {
         return shapeColor;
     }
 
@@ -52,7 +50,7 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         this.shapeHeight = shapeHeight;
     }
 
-    public final void setShapeColor(ObjectProperty<Color> shapeColor) {
+    public final void setShapeColor(ReadOnlyObjectProperty<Color> shapeColor) {
         if (shapeColor == null) {
             throw new IllegalArgumentException("Shape color cannot be null");
         }
