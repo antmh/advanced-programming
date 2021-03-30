@@ -1,6 +1,8 @@
 package lab6;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
@@ -14,20 +16,29 @@ public class Canvas extends javafx.scene.canvas.Canvas {
     private ReadOnlyObjectProperty<Color> shapeColor;
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 1000;
+    private List<Shape> history;
+    private int historyPosition;
 
     public Canvas() {
         super(WIDTH, HEIGHT);
+        history = new ArrayList<>();
+        historyPosition = -1;
         setOnMouseClicked(this::mouseClicked);
     }
 
     private void mouseClicked(MouseEvent event) {
-        var context = getGraphicsContext2D();
-        context.setFill(shapeColor.get());
-        var x = event.getX();
-        var y = event.getY();
-        var width = shapeWidth.get();
-        var height = shapeHeight.get();
-        context.fillRect(x - width / 2, y - height / 2, width, height);
+        Shape rectangle = new Rectangle();
+        rectangle.setColor(shapeColor.get());
+        rectangle.setX(event.getX());
+        rectangle.setY(event.getY());
+        rectangle.setWidth(shapeWidth.get());
+        rectangle.setHeight(shapeHeight.get());
+        rectangle.draw(getGraphicsContext2D());
+        ++historyPosition;
+        while (historyPosition != history.size()) {
+            history.remove(historyPosition);
+        }
+        history.add(rectangle);
     }
 
     public BufferedImage getImage() {
@@ -44,6 +55,23 @@ public class Canvas extends javafx.scene.canvas.Canvas {
 
     public void reset() {
         getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
+        history.clear();
+    }
+    
+    public void undo() {
+        if (historyPosition < 0) {
+            return;
+        }       
+        var bounds = history.get(historyPosition).getBounds();
+        var context = getGraphicsContext2D();
+        context.clearRect(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
+        for (int i = 0; i < historyPosition; ++i) {
+            var shape = history.get(i);
+            if (shape.getBounds().intersects(bounds)) {
+                shape.draw(context);
+            }
+        }
+        --historyPosition;
     }
 
     public ReadOnlyObjectProperty<Integer> getShapeWidth() {

@@ -29,6 +29,7 @@ public class Main extends Application {
         controlPanel.setImageSupplier(canvas::getImage);
         controlPanel.setImageConsumer(canvas::setImage);
         controlPanel.setOnReset((event) -> canvas.reset());
+        controlPanel.setOnUndo((event) -> canvas.undo());
         controlPanel.setOnExit((event) -> Platform.exit());
 
         var vbox = new VBox(configurationPanel, scrollPane, controlPanel);

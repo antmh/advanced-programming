@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 public class ControlPanel extends HBox {
     private Supplier<BufferedImage> imageSupplier;
     private Consumer<BufferedImage> imageConsumer;
+    private Button undoButton;
     private Button resetButton;
     private Button exitButton;
 
@@ -26,10 +27,11 @@ public class ControlPanel extends HBox {
         loadButton.setOnAction(this::load);
         var saveButton = new Button("Save");
         saveButton.setOnAction(this::save);
+        undoButton = new Button("Undo");
         resetButton = new Button("Reset");
         exitButton = new Button("Exit");
         setSpacing(10);
-        getChildren().addAll(loadButton, saveButton, resetButton, exitButton);
+        getChildren().addAll(loadButton, saveButton, undoButton, resetButton, exitButton);
     }
 
     private void save(ActionEvent event) {
@@ -80,6 +82,13 @@ public class ControlPanel extends HBox {
         resetButton.setOnAction(onReset);
     }
     
+    public void setOnUndo(EventHandler<ActionEvent> onUndo) {
+        if (onUndo == null) {
+            throw new IllegalArgumentException("onUndo cannot be null");
+        }
+        undoButton.setOnAction(onUndo);
+    }
+
     public void setOnExit(EventHandler<ActionEvent> onExit) {
         if (onExit == null) {
             throw new IllegalArgumentException("onExit cannot be null");
