@@ -1,12 +1,11 @@
 package lab6;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -16,29 +15,38 @@ public class Canvas extends javafx.scene.canvas.Canvas {
     private ReadOnlyObjectProperty<Color> shapeColor;
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 1000;
-    private List<Shape> history;
-    private int historyPosition;
+    private History history;
 
     public Canvas() {
         super(WIDTH, HEIGHT);
-        history = new ArrayList<>();
-        historyPosition = -1;
+        history = new History();
         setOnMouseClicked(this::mouseClicked);
     }
 
     private void mouseClicked(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            addShape(event.getX(), event.getY());
+        } else if (event.getButton() == MouseButton.SECONDARY) {
+            removeShape(event.getX(), event.getY());
+        }
+    }
+        
+    private void addShape(double x, double y) {
         Shape rectangle = new Rectangle();
         rectangle.setColor(shapeColor.get());
-        rectangle.setX(event.getX());
-        rectangle.setY(event.getY());
+        rectangle.setX(x);
+        rectangle.setY(y);
         rectangle.setWidth(shapeWidth.get());
         rectangle.setHeight(shapeHeight.get());
         rectangle.draw(getGraphicsContext2D());
-        ++historyPosition;
-        while (historyPosition != history.size()) {
-            history.remove(historyPosition);
+        history.addShape(rectangle);
+    }
+    
+    private void removeShape(double x, double y) {
+        var actions = history.removeShape(x, y);
+        for (var action : actions) {
+            action.execute(getGraphicsContext2D());
         }
-        history.add(rectangle);
     }
 
     public BufferedImage getImage() {
@@ -59,19 +67,10 @@ public class Canvas extends javafx.scene.canvas.Canvas {
     }
     
     public void undo() {
-        if (historyPosition < 0) {
-            return;
-        }       
-        var bounds = history.get(historyPosition).getBounds();
-        var context = getGraphicsContext2D();
-        context.clearRect(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
-        for (int i = 0; i < historyPosition; ++i) {
-            var shape = history.get(i);
-            if (shape.getBounds().intersects(bounds)) {
-                shape.draw(context);
-            }
+        var actions = history.undo();
+        for (var action : actions) {
+            action.execute(getGraphicsContext2D());
         }
-        --historyPosition;
     }
 
     public ReadOnlyObjectProperty<Integer> getShapeWidth() {

@@ -17,6 +17,9 @@ public abstract class Shape {
     }
 
     public void setColor(Color color) {
+        if (color == null) {
+            throw new IllegalArgumentException("color cannot be null");
+        }
         this.color = color;
     }
 
@@ -41,6 +44,9 @@ public abstract class Shape {
     }
 
     public void setWidth(int width) {
+        if (width < 0) {
+            throw new IllegalArgumentException("width cannot be negative");
+        }
         this.width = width;
     }
 
@@ -49,6 +55,9 @@ public abstract class Shape {
     }
 
     public void setHeight(int height) {
+        if (height < 0) {
+            throw new IllegalArgumentException("height cannot be negative");
+        }
         this.height = height;
     }
 
