@@ -1,11 +1,11 @@
-package lab6;
+package lab6.shapes;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public abstract class Shape {
+public abstract class Shape implements Cloneable {
     protected Color color;
     protected double x, y;
     protected int width, height;

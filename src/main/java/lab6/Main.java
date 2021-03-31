@@ -5,9 +5,13 @@ import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lab6.tabs.OvalTab;
+import lab6.tabs.RectangleTab;
 
 public class Main extends Application {
 
@@ -16,12 +20,10 @@ public class Main extends Application {
     }
 
     private Parent createContent() {
-        var configurationPanel = new ConfigurationPanel();
+        var configurationTabPane = new TabPane(new RectangleTab(), new OvalTab());
+        configurationTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-        var canvas = new Canvas();
-        canvas.setShapeWidth(configurationPanel.getWidthProperty());
-        canvas.setShapeHeight(configurationPanel.getHeightProperty());
-        canvas.setShapeColor(configurationPanel.getColorProperty());
+        var canvas = new Canvas(configurationTabPane);
         var scrollPane = new ScrollPane(canvas);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
@@ -32,7 +34,8 @@ public class Main extends Application {
         controlPanel.setOnUndo((event) -> canvas.undo());
         controlPanel.setOnExit((event) -> Platform.exit());
 
-        var vbox = new VBox(configurationPanel, scrollPane, controlPanel);
+        var vbox = new VBox(configurationTabPane, scrollPane, controlPanel);
+        scrollPane.maxHeightProperty().bind(vbox.heightProperty().multiply(3).divide(5));
         vbox.setSpacing(10);
         return vbox;
     }

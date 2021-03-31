@@ -3,6 +3,11 @@ package lab6;
 import java.util.ArrayList;
 import java.util.List;
 
+import lab6.actions.Action;
+import lab6.actions.ClearAction;
+import lab6.actions.DrawAction;
+import lab6.shapes.Shape;
+
 public class History {
     private List<Action> list;
     private int position;
@@ -55,7 +60,7 @@ public class History {
     private boolean isRemoved(int itemIndex) {
         for (int i = itemIndex + 1; i <= position; ++i) {
             var item = list.get(i);
-            if (item instanceof ClearAction && item.shape == list.get(itemIndex).getShape()) {
+            if (item instanceof ClearAction && item.getShape() == list.get(itemIndex).getShape()) {
                 return true;
             }
         }

@@ -1,18 +1,18 @@
-package lab6;
+package lab6.tabs;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class ConfigurationPanel extends VBox {
+public class RectangleTab extends Tab {
     private Spinner<Integer> widthSpinner;
     private Spinner<Integer> heightSpinner;
     private ColorPicker colorPicker;
 
-    public ConfigurationPanel() {
+    public RectangleTab() {
         var widthLabel = new Label("Width:");
         widthSpinner = new Spinner<>(0, 100, 20);
         widthSpinner.setEditable(true);
@@ -24,18 +24,19 @@ public class ConfigurationPanel extends VBox {
         var colorLabel = new Label("Color:");
         colorPicker = new ColorPicker(Color.BLACK);
 
-        getChildren().addAll(widthLabel, widthSpinner, heightLabel, heightSpinner, colorLabel, colorPicker);
+        setText("Rectangle");
+        setContent(new VBox(widthLabel, widthSpinner, heightLabel, heightSpinner, colorLabel, colorPicker));
     }
-    
-    public ReadOnlyObjectProperty<Integer> getWidthProperty() {
-        return widthSpinner.valueProperty();
+
+    public final Spinner<Integer> getWidthSpinner() {
+        return widthSpinner;
     }
-    
-    public ReadOnlyObjectProperty<Integer> getHeightProperty() {
-        return heightSpinner.valueProperty();
+
+    public final Spinner<Integer> getHeightSpinner() {
+        return heightSpinner;
     }
-    
-    public ReadOnlyObjectProperty<Color> getColorProperty() {
-        return colorPicker.valueProperty();
+
+    public final ColorPicker getColorPicker() {
+        return colorPicker;
     }
 }
