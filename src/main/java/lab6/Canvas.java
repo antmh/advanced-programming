@@ -9,8 +9,10 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import lab6.shapes.Oval;
+import lab6.shapes.Line;
 import lab6.shapes.Rectangle;
 import lab6.shapes.Shape;
+import lab6.tabs.FreeDrawTab;
 import lab6.tabs.OvalTab;
 import lab6.tabs.RectangleTab;
 
@@ -19,6 +21,8 @@ public class Canvas extends javafx.scene.canvas.Canvas {
     private static final int HEIGHT = 1000;
     private History history;
     private TabPane configurationTabPane;
+    private boolean dragging;
+    private Line line;
 
     public Canvas(TabPane configurationTabPane) {
         super(WIDTH, HEIGHT);
@@ -27,10 +31,14 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         }
         this.configurationTabPane = configurationTabPane;
         history = new History();
-        setOnMouseClicked(this::mouseClicked);
+        setOnMouseClicked(this::onMouseClicked);
+        setOnMouseDragged(this::onMouseDragged);
+        dragging = false;
+        line = null;
     }
 
-    private void mouseClicked(MouseEvent event) {
+    private void onMouseClicked(MouseEvent event) {
+        dragging = false;
         if (event.getButton() == MouseButton.PRIMARY) {
             addShape(event.getX(), event.getY());
         } else if (event.getButton() == MouseButton.SECONDARY) {
@@ -38,30 +46,59 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         }
     }
 
-    private void addShape(double x, double y) {
-        Shape shape = null;
-        Tab selectedTab = null;
+    private void onMouseDragged(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY && getSelectedTab() instanceof FreeDrawTab) {
+            dragging = true;
+            addShape(event.getX(), event.getY());
+        }
+    }
+
+    private Tab getSelectedTab() {
         for (var tab : configurationTabPane.getTabs()) {
             if (tab.isSelected()) {
-                selectedTab = tab;
-                break;
+                return tab;
             }
         }
+        return null;
+    }
+
+    private void addShape(double x, double y) {
+        Shape shape = null;
+        Tab selectedTab = getSelectedTab();
         if (selectedTab instanceof RectangleTab) {
             var rectangleTab = (RectangleTab) selectedTab;
-            shape = new Rectangle();
-            shape.setColor(rectangleTab.getColorPicker().getValue());
-            shape.setWidth(rectangleTab.getWidthSpinner().getValue());
-            shape.setHeight(rectangleTab.getHeightSpinner().getValue());
+            var rectangle = new Rectangle();
+            rectangle.setColor(rectangleTab.getColorPicker().getValue());
+            rectangle.setWidth(rectangleTab.getWidthSpinner().getValue());
+            rectangle.setHeight(rectangleTab.getHeightSpinner().getValue());
+            rectangle.setX(x);
+            rectangle.setY(y);
+            shape = rectangle;
         } else if (selectedTab instanceof OvalTab) {
             var ovalTab = (OvalTab) selectedTab;
-            shape = new Oval();
-            shape.setColor(ovalTab.getColorPicker().getValue());
-            shape.setWidth(ovalTab.getWidthSpinner().getValue());
-            shape.setHeight(ovalTab.getHeightSpinner().getValue());
+            var oval = new Oval();
+            oval.setColor(ovalTab.getColorPicker().getValue());
+            oval.setWidth(ovalTab.getWidthSpinner().getValue());
+            oval.setHeight(ovalTab.getHeightSpinner().getValue());
+            oval.setX(x);
+            oval.setY(y);
+            shape = oval;
+        } else if (selectedTab instanceof FreeDrawTab) {
+            var freeDrawTab = (FreeDrawTab) selectedTab;
+            if (line == null) {
+                line = new Line();
+                line.setWidth(freeDrawTab.getLineWidthSpinner().getValue());
+                line.setColor(freeDrawTab.getColorPicker().getValue());
+            }
+            line.addPoint(x, y);
+            if (!dragging) {
+                shape = line;
+                line = null;
+            } else {
+                line.draw(getGraphicsContext2D());
+                return;
+            }
         }
-        shape.setX(x);
-        shape.setY(y);
         shape.draw(getGraphicsContext2D());
         history.addShape(shape);
     }

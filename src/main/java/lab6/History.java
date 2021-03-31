@@ -19,7 +19,7 @@ public class History {
 
     public void clear() {
         list.clear();
-        position = 0;
+        position = -1;
     }
 
     public void addShape(Shape shape) {
