@@ -94,11 +94,11 @@ public class Canvas extends javafx.scene.canvas.Canvas {
             line.draw(getGraphicsContext2D());
             if (!dragging) {
                 history.addShape(line);
-                var straightLine = line.straightLine();
-                if (straightLine.isPresent()) {
+                var detectedShape = line.detectShape();
+                if (detectedShape.isPresent()) {
                     undo();
-                    straightLine.get().draw(getGraphicsContext2D());
-                    history.addShape(straightLine.get());
+                    detectedShape.get().draw(getGraphicsContext2D());
+                    history.addShape(detectedShape.get());
                 }
                 line = null;
             }
