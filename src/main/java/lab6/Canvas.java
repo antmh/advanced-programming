@@ -91,13 +91,18 @@ public class Canvas extends javafx.scene.canvas.Canvas {
                 line.setColor(freeDrawTab.getColorPicker().getValue());
             }
             line.addPoint(x, y);
+            line.draw(getGraphicsContext2D());
             if (!dragging) {
-                shape = line;
+                history.addShape(line);
+                var straightLine = line.straightLine();
+                if (straightLine.isPresent()) {
+                    undo();
+                    straightLine.get().draw(getGraphicsContext2D());
+                    history.addShape(straightLine.get());
+                }
                 line = null;
-            } else {
-                line.draw(getGraphicsContext2D());
-                return;
             }
+            return;
         }
         shape.draw(getGraphicsContext2D());
         history.addShape(shape);
