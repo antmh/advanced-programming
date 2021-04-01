@@ -1,17 +1,98 @@
 package lab6;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.scene.paint.Color;
+import lab6.DrawerParser.AddExprContext;
+import lab6.DrawerParser.AssignContext;
+import lab6.DrawerParser.DivExprContext;
+import lab6.DrawerParser.IdExprContext;
+import lab6.DrawerParser.LitExprContext;
+import lab6.DrawerParser.MulExprContext;
 import lab6.DrawerParser.OvalContext;
+import lab6.DrawerParser.ParenExprContext;
 import lab6.DrawerParser.RectangleContext;
+import lab6.DrawerParser.SubExprContext;
 import lab6.shapes.Oval;
 import lab6.shapes.Rectangle;
 import lab6.shapes.Shape;
 
-public class GrammarVisitor extends DrawerBaseVisitor<List<Shape>> {
+public class GrammarVisitor extends DrawerBaseVisitor<Integer> {
     private List<Shape> result;
+    private Map<String, Integer> memory;
+
+    public GrammarVisitor() {
+        result = new ArrayList<>();
+        memory = new HashMap<>();
+    }
+
+    @Override
+    public Integer visitRectangle(RectangleContext ctx) {
+        var rectangle = new Rectangle();
+        rectangle.setColor(new Color(visit(ctx.red) / 255.0, visit(ctx.green) / 255.0, visit(ctx.blue) / 255.0, 1.0));
+        rectangle.setHeight(visit(ctx.height));
+        rectangle.setWidth(visit(ctx.width));
+        rectangle.setX(visit(ctx.x));
+        rectangle.setY(visit(ctx.y));
+        result.add(rectangle);
+        return 0;
+    }
+
+    @Override
+    public Integer visitOval(OvalContext ctx) {
+        var oval = new Oval();
+        oval.setColor(new Color(visit(ctx.red) / 255.0, visit(ctx.green) / 255.0, visit(ctx.blue) / 255.0, 1.0));
+        oval.setHeight(visit(ctx.height));
+        oval.setWidth(visit(ctx.width));
+        oval.setX(visit(ctx.x));
+        oval.setY(visit(ctx.y));
+        result.add(oval);
+        return 0;
+    }
+
+    @Override
+    public Integer visitAssign(AssignContext ctx) {
+        memory.put(ctx.ID().getText(), visit(ctx.expr()));
+        return 0;
+    }
+
+    @Override
+    public Integer visitIdExpr(IdExprContext ctx) {
+        return memory.getOrDefault(ctx.getText(), 0);
+    }
+
+    @Override
+    public Integer visitLitExpr(LitExprContext ctx) {
+        return Integer.parseInt(ctx.getText());
+    }
+    
+    @Override
+    public Integer visitParenExpr(ParenExprContext ctx) {
+        return visit(ctx.expr());
+    }
+
+    @Override
+    public Integer visitMulExpr(MulExprContext ctx) {
+        return visit(ctx.left) * visit(ctx.right);
+    }
+
+    @Override
+    public Integer visitDivExpr(DivExprContext ctx) {
+        return visit(ctx.left) / visit(ctx.right);
+    }
+
+    @Override
+    public Integer visitAddExpr(AddExprContext ctx) {
+        return visit(ctx.left) + visit(ctx.right);
+    }
+
+    @Override
+    public Integer visitSubExpr(SubExprContext ctx) {
+        return visit(ctx.left) - visit(ctx.right);
+    }
 
     public final List<Shape> getResult() {
         return result;
@@ -19,47 +100,5 @@ public class GrammarVisitor extends DrawerBaseVisitor<List<Shape>> {
 
     public final void setResult(List<Shape> result) {
         this.result = result;
-    }
-
-    public GrammarVisitor() {
-        result = new ArrayList<>();
-    }
-
-    @Override
-    public List<Shape> visitRectangle(RectangleContext ctx) {
-        int width = Integer.parseInt(ctx.width().getText());
-        int height = Integer.parseInt(ctx.height().getText());
-        int x = Integer.parseInt(ctx.x().getText());
-        int y = Integer.parseInt(ctx.y().getText());
-        int red = Integer.parseInt(ctx.red().getText());
-        int green = Integer.parseInt(ctx.green().getText());
-        int blue = Integer.parseInt(ctx.blue().getText());
-        var rectangle = new Rectangle();
-        rectangle.setColor(new Color(red / 255.0, green / 255.0, blue / 255.0, 1.0));
-        rectangle.setHeight(height);
-        rectangle.setWidth(width);
-        rectangle.setX(x);
-        rectangle.setY(y);
-        result.add(rectangle);
-        return result;
-    }
-
-    @Override
-    public List<Shape> visitOval(OvalContext ctx) {
-        int width = Integer.parseInt(ctx.width().getText());
-        int height = Integer.parseInt(ctx.height().getText());
-        int x = Integer.parseInt(ctx.x().getText());
-        int y = Integer.parseInt(ctx.y().getText());
-        int red = Integer.parseInt(ctx.red().getText());
-        int green = Integer.parseInt(ctx.green().getText());
-        int blue = Integer.parseInt(ctx.blue().getText());
-        var oval = new Oval();
-        oval.setColor(new Color(red / 255.0, green / 255.0, blue / 255.0, 1.0));
-        oval.setHeight(height);
-        oval.setWidth(width);
-        oval.setX(x);
-        oval.setY(y);
-        result.add(oval);
-        return result;
     }
 }
