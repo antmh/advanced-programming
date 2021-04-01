@@ -24,9 +24,18 @@ public class Player implements Runnable {
     public void run() {
         var random = new Random();
         while (!board.isEmpty()) {
-            var token = board.take(1 + random.nextInt(board.size()));
-            if (token.isPresent()) {
-                tokens.add(token.get());
+            if (tokens.isEmpty()) {
+                var randomPosition = 1 + random.nextInt(board.size());
+                var token = board.takeToken(randomPosition);
+                if (token.isPresent()) {
+                    tokens.add(token.get());
+                }
+            } else {
+                var randomPosition = random.nextInt(tokens.size());
+                var token = board.takeTokenWithFirst(tokens.get(randomPosition).getSecond());
+                if (token.isPresent()) {
+                    tokens.add(token.get());
+                }
             }
             try {
                 Thread.sleep(10);
@@ -36,19 +45,19 @@ public class Player implements Runnable {
         }
     }
 
-    public final String getName() {
+    public String getName() {
         return name;
     }
 
-    public final void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public final List<Token> getTokens() {
+    public List<Token> getTokens() {
         return tokens;
     }
 
-    public final void setTokens(List<Token> tokens) {
+    public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
     }
 

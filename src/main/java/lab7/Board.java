@@ -19,15 +19,17 @@ public class Board {
             tokens.add(token);
         }
     }
-
-    public synchronized Optional<Token> get(int position) {
-        if (position < tokens.size()) {
-            return Optional.of(tokens.get(position));
+    
+    public synchronized Optional<Token> takeTokenWithFirst(int first) {
+        for (int i = 0; i < tokens.size(); ++i) {
+            if (tokens.get(i).getFirst() == first) {
+                return Optional.of(tokens.remove(i));
+            }
         }
         return Optional.empty();
     }
 
-    public synchronized Optional<Token> take(int position) {
+    public synchronized Optional<Token> takeToken(int position) {
         if (position < tokens.size()) {
             return Optional.of(tokens.remove(position));
         }
