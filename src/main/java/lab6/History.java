@@ -27,7 +27,7 @@ public class History {
         if (shape == null) {
             throw new IllegalArgumentException("shape cannot be null");
         }
-        incrementPosition();
+        overwriteUndoHistory();
         list.add(new DrawAction(shape));
     }
 
@@ -35,7 +35,7 @@ public class History {
         if (actions == null) {
             throw new IllegalArgumentException("actions cannot be null");
         }
-        incrementPosition();
+        overwriteUndoHistory();
         position += actions.size() - 1;
         list.addAll(actions);
     }
@@ -53,7 +53,7 @@ public class History {
         if (shapeToRemove == null) {
             return result;
         }
-        incrementPosition();
+        overwriteUndoHistory();
         var clearAction = new ClearAction(shapeToRemove);
         list.add(clearAction);
         result.add(clearAction);
@@ -77,7 +77,7 @@ public class History {
         return false;
     }
 
-    private void incrementPosition() {
+    private void overwriteUndoHistory() {
         ++position;
         while (position != list.size()) {
             list.remove(position);
