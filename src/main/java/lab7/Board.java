@@ -14,7 +14,7 @@ public class Board {
         for (int i = 0; i < tokensNumber; ++i) {
             Token token;
             do {
-                token = new Token(1 + random.nextInt(n), 1 + random.nextInt(n));
+                token = new Token(1 + random.nextInt(n), 1 + random.nextInt(n), 1 + random.nextInt(100));
             } while (tokenExists(token));
             tokens.add(token);
         }

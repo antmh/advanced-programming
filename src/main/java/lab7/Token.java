@@ -2,13 +2,16 @@ package lab7;
 
 public class Token {
     private int first, second;
+    private int value;
 
     public Token() {
     }
 
-    public Token(int first, int second) {
+    public Token(int value, int first, int second) {
+        validateValue(value);
         validateValue(first);
         validateValue(second);
+        this.value = value;
         this.first = first;
         this.second = second;
     }
@@ -37,6 +40,15 @@ public class Token {
         this.second = second;
     }
 
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        validateValue(value);
+        this.value = value;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -55,6 +67,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Token (" + first + ", " + second + ")";
+        return "Token [" + value + "] (" + first + ", " + second + ")";
     }
 }
