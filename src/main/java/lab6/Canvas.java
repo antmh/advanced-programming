@@ -137,12 +137,16 @@ public class Canvas extends javafx.scene.canvas.Canvas {
         doActions(actions);
     }
     
-    public void doActions(List<Action> actions) {
-        if (actions == null) {
-            throw new IllegalArgumentException("actions cannot be null");
-        }
+    private void doActions(List<Action> actions) {
         for (var action : actions) {
             action.execute(getGraphicsContext2D());
+        }
+    }
+    
+    public void drawShapes(List<Shape> shapes) {
+        for (var shape : shapes) {
+            history.addShape(shape);
+            shape.draw(getGraphicsContext2D());
         }
     }
 }

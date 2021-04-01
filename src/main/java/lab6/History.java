@@ -30,6 +30,15 @@ public class History {
         list.add(new DrawAction(shape));
     }
 
+    public void addActions(List<Action> actions) {
+        if (actions == null) {
+            throw new IllegalArgumentException("actions cannot be null");
+        }
+        incrementPosition();
+        position += actions.size() - 1;
+        list.addAll(actions);
+    }
+
     public List<Action> removeShape(double x, double y) {
         Shape shapeToRemove = null;
         for (int i = list.size() - 1; i >= 0; --i) {

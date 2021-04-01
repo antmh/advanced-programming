@@ -34,7 +34,7 @@ public class CommandsTab extends Tab {
         ParseContext context = parser.parse();
         var visitor = new GrammarVisitor();
         visitor.visit(context);
-        canvas.doActions(visitor.getResult());
+        canvas.drawShapes(visitor.getResult());
     }
 
     public final Canvas getCanvas() {

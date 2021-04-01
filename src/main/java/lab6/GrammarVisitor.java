@@ -6,19 +6,18 @@ import java.util.List;
 import javafx.scene.paint.Color;
 import lab6.DrawerParser.OvalContext;
 import lab6.DrawerParser.RectangleContext;
-import lab6.actions.Action;
-import lab6.actions.DrawAction;
 import lab6.shapes.Oval;
 import lab6.shapes.Rectangle;
+import lab6.shapes.Shape;
 
-public class GrammarVisitor extends DrawerBaseVisitor<List<Action>> {
-    private List<Action> result;
+public class GrammarVisitor extends DrawerBaseVisitor<List<Shape>> {
+    private List<Shape> result;
 
-    public final List<Action> getResult() {
+    public final List<Shape> getResult() {
         return result;
     }
 
-    public final void setResult(List<Action> result) {
+    public final void setResult(List<Shape> result) {
         this.result = result;
     }
 
@@ -27,7 +26,7 @@ public class GrammarVisitor extends DrawerBaseVisitor<List<Action>> {
     }
 
     @Override
-    public List<Action> visitRectangle(RectangleContext ctx) {
+    public List<Shape> visitRectangle(RectangleContext ctx) {
         int width = Integer.parseInt(ctx.width().getText());
         int height = Integer.parseInt(ctx.height().getText());
         int x = Integer.parseInt(ctx.x().getText());
@@ -41,12 +40,12 @@ public class GrammarVisitor extends DrawerBaseVisitor<List<Action>> {
         rectangle.setWidth(width);
         rectangle.setX(x);
         rectangle.setY(y);
-        result.add(new DrawAction(rectangle));
+        result.add(rectangle);
         return result;
     }
 
     @Override
-    public List<Action> visitOval(OvalContext ctx) {
+    public List<Shape> visitOval(OvalContext ctx) {
         int width = Integer.parseInt(ctx.width().getText());
         int height = Integer.parseInt(ctx.height().getText());
         int x = Integer.parseInt(ctx.x().getText());
@@ -60,7 +59,7 @@ public class GrammarVisitor extends DrawerBaseVisitor<List<Action>> {
         oval.setWidth(width);
         oval.setX(x);
         oval.setY(y);
-        result.add(new DrawAction(oval));
+        result.add(oval);
         return result;
     }
 }
