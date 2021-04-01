@@ -8,7 +8,9 @@ import java.util.Map;
 import javafx.scene.paint.Color;
 import lab6.DrawerParser.AddExprContext;
 import lab6.DrawerParser.AssignContext;
+import lab6.DrawerParser.BlockContext;
 import lab6.DrawerParser.DivExprContext;
+import lab6.DrawerParser.ForContext;
 import lab6.DrawerParser.IdExprContext;
 import lab6.DrawerParser.LitExprContext;
 import lab6.DrawerParser.MulExprContext;
@@ -58,6 +60,26 @@ public class GrammarVisitor extends DrawerBaseVisitor<Integer> {
         memory.put(ctx.ID().getText(), visit(ctx.expr()));
         return 0;
     }
+    
+    @Override
+    public Integer visitBlock(BlockContext ctx) {
+        for (var statement : ctx.statement()) {
+            visit(statement);
+        }
+        return 0;
+    }
+    
+    @Override
+    public Integer visitFor(ForContext ctx) {
+        int start = visit(ctx.start);
+        int end = visit(ctx.end);
+        String ident = ctx.ID().getText();
+        for (int i = start; i <= end; ++i) {
+            memory.put(ident, i);
+            visit(ctx.block());
+        }
+        return 0;
+    }
 
     @Override
     public Integer visitIdExpr(IdExprContext ctx) {
@@ -93,6 +115,7 @@ public class GrammarVisitor extends DrawerBaseVisitor<Integer> {
     public Integer visitSubExpr(SubExprContext ctx) {
         return visit(ctx.left) - visit(ctx.right);
     }
+
 
     public final List<Shape> getResult() {
         return result;

@@ -2,9 +2,14 @@ grammar Drawer;
 
 parse
 :
+    block EOF
+;
+
+block
+:
     (
         statement ';'
-    )* EOF
+    )*
 ;
 
 ID
@@ -35,6 +40,7 @@ statement
     | 'oval' x = expr y = expr width = expr height = expr red = expr green =
     expr blue = expr # oval
     | ID '=' expr # assign
+    | 'for' ID '=' start = expr '..' end = expr '{' block '}' # for
 ;
 
 WS
