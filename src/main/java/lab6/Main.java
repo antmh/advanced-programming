@@ -10,6 +10,7 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lab6.tabs.CommandsTab;
 import lab6.tabs.FreeDrawTab;
 import lab6.tabs.OvalTab;
 import lab6.tabs.RectangleTab;
@@ -21,10 +22,12 @@ public class Main extends Application {
     }
 
     private Parent createContent() {
-        var configurationTabPane = new TabPane(new RectangleTab(), new OvalTab(), new FreeDrawTab());
+        var commandsTab = new CommandsTab();
+        var configurationTabPane = new TabPane(new RectangleTab(), new OvalTab(), new FreeDrawTab(), commandsTab);
         configurationTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
         var canvas = new Canvas(configurationTabPane);
+        commandsTab.setCanvas(canvas);
         var scrollPane = new ScrollPane(canvas);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 

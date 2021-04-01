@@ -1,6 +1,7 @@
 package lab6;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Tab;
@@ -9,6 +10,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import lab6.shapes.Oval;
+import lab6.actions.Action;
 import lab6.shapes.Line;
 import lab6.shapes.Rectangle;
 import lab6.shapes.Shape;
@@ -110,9 +112,7 @@ public class Canvas extends javafx.scene.canvas.Canvas {
 
     private void removeShape(double x, double y) {
         var actions = history.removeShape(x, y);
-        for (var action : actions) {
-            action.execute(getGraphicsContext2D());
-        }
+        doActions(actions);
     }
 
     public BufferedImage getImage() {
@@ -134,6 +134,13 @@ public class Canvas extends javafx.scene.canvas.Canvas {
 
     public void undo() {
         var actions = history.undo();
+        doActions(actions);
+    }
+    
+    public void doActions(List<Action> actions) {
+        if (actions == null) {
+            throw new IllegalArgumentException("actions cannot be null");
+        }
         for (var action : actions) {
             action.execute(getGraphicsContext2D());
         }
