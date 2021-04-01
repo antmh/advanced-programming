@@ -1,34 +1,58 @@
 package lab7;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class Board {
-    private Token[] tokens;
+    private List<Token> tokens;
 
     public Board(int tokensNumber, int n) {
-        tokens = new Token[tokensNumber];
+        tokens = new ArrayList<>(tokensNumber);
         var random = new Random();
-        for (int index = 0; index < tokens.length; ++index) {
+        for (int i = 0; i < tokensNumber; ++i) {
             Token token;
             do {
-                token = new Token(1 + random.nextInt(n + 1), 1 + random.nextInt(n + 1));
-            } while (tokenExists(token, index));
-            tokens[index] = token;
+                token = new Token(1 + random.nextInt(n), 1 + random.nextInt(n));
+            } while (tokenExists(token));
+            tokens.add(token);
         }
     }
 
-    private boolean tokenExists(Token token, int end) {
-        for (int i = 0; i < end; ++i) {
-            if (tokens[i].equals(token)) {
+    public synchronized Optional<Token> get(int position) {
+        if (position < tokens.size()) {
+            return Optional.of(tokens.get(position));
+        }
+        return Optional.empty();
+    }
+
+    public synchronized Optional<Token> take(int position) {
+        if (position < tokens.size()) {
+            return Optional.of(tokens.remove(position));
+        }
+        return Optional.empty();
+    }
+
+    public synchronized boolean tokenExists(Token token) {
+        for (var boardToken : tokens) {
+            if (boardToken.equals(token)) {
                 return true;
             }
         }
         return false;
     }
+    
+    public synchronized int size() {
+        return tokens.size();
+    }
+
+    public synchronized boolean isEmpty() {
+        return tokens.isEmpty();
+    }
 
     @Override
     public String toString() {
-        return "Board [" + Arrays.toString(tokens) + "]";
+        return "Board " + tokens;
     }
 }
