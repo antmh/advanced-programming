@@ -20,6 +20,7 @@ public class ControlPanel extends HBox {
     private Consumer<BufferedImage> imageConsumer;
     private Button undoButton;
     private Button resetButton;
+    private Button redoButton;
     private Button exitButton;
 
     public ControlPanel() {
@@ -28,10 +29,11 @@ public class ControlPanel extends HBox {
         var saveButton = new Button("Save");
         saveButton.setOnAction(this::save);
         undoButton = new Button("Undo");
+        redoButton = new Button("Redo");
         resetButton = new Button("Reset");
         exitButton = new Button("Exit");
         setSpacing(10);
-        getChildren().addAll(loadButton, saveButton, undoButton, resetButton, exitButton);
+        getChildren().addAll(loadButton, saveButton, undoButton, redoButton, resetButton, exitButton);
     }
 
     private void save(ActionEvent event) {
@@ -81,12 +83,19 @@ public class ControlPanel extends HBox {
         }
         resetButton.setOnAction(onReset);
     }
-    
+
     public void setOnUndo(EventHandler<ActionEvent> onUndo) {
         if (onUndo == null) {
             throw new IllegalArgumentException("onUndo cannot be null");
         }
         undoButton.setOnAction(onUndo);
+    }
+
+    public void setOnRedo(EventHandler<ActionEvent> onRedo) {
+        if (onRedo == null) {
+            throw new IllegalArgumentException("onRedo cannot be null");
+        }
+        redoButton.setOnAction(onRedo);
     }
 
     public void setOnExit(EventHandler<ActionEvent> onExit) {

@@ -2,6 +2,7 @@ package lab6;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import lab6.actions.Action;
 import lab6.actions.ClearAction;
@@ -103,5 +104,14 @@ public class History {
             }
         }
         return result;
+    }
+
+    public Optional<Action> redo() {
+        if (position < list.size() - 1) {
+            ++position;
+            var result = list.get(position);
+            return Optional.of(result);
+        }
+        return Optional.empty();
     }
 }
