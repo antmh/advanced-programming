@@ -1,6 +1,7 @@
 package lab7;
 
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +24,7 @@ public class Game {
             executor.execute(player);
         }
         try {
-            executor.awaitTermination(10, TimeUnit.SECONDS);
+            executor.awaitTermination(100, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             System.err.println(e);
         }
@@ -62,6 +63,20 @@ public class Game {
         this.playersNumber = playersNumber;
     }
 
+    public void printResult() {
+        System.out.println("Result:");
+        for (var player : players) {
+            System.out.println(player);
+        }
+    }
+
+    public void printWinners() {
+        System.out.println("Winners:");
+        for (var winner : getWinners()) {
+            System.out.println(winner.getName());
+        }
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -70,8 +85,19 @@ public class Game {
         return players;
     }
 
-    @Override
-    public String toString() {
-        return "Game " + Arrays.toString(players);
+    public Set<Player> getWinners() {
+        int maxScore = 0;
+        Set<Player> winners = new HashSet<>();
+        for (var player : players) {
+            int score = new Score(player.getTokens()).calculate();
+            if (score > maxScore) {
+                maxScore = score;
+                winners.clear();
+                winners.add(player);
+            } else if (score == maxScore) {
+                winners.add(player);
+            }
+        }
+        return winners;
     }
 }

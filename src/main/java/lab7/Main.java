@@ -7,6 +7,7 @@ public class Main {
         game.setPlayersNumber(5);
         game.setTokensNumber(20);
         game.play();
-        System.out.println(game);
+        game.printResult();
+        game.printWinners();
     }
 }
