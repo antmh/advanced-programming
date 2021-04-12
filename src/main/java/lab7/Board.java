@@ -1,60 +1,63 @@
 package lab7;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
 
 public class Board {
-    private List<Token> tokens;
+    private int graph[][];
+    private Random random;
+    private int edges = 0;
 
     public Board(int tokensNumber, int n) {
-        tokens = new ArrayList<>(tokensNumber);
-        var random = new Random();
+        if (n < 1) {
+            throw new IllegalArgumentException("n must be positive");
+        }
+        if (tokensNumber < 0) {
+            throw new IllegalArgumentException("The number of tokens must be positive");
+        }
+        edges = tokensNumber;
+        graph = new int[n][n];
+        for (int i = 0; i < n; ++i) {
+            Arrays.fill(graph[i], 0);
+        }
+        random = new Random();
         for (int i = 0; i < tokensNumber; ++i) {
-            Token token;
+            int from, to;
             do {
-                token = new Token(1 + random.nextInt(n), 1 + random.nextInt(n), 1 + random.nextInt(100));
-            } while (tokenExists(token));
-            tokens.add(token);
+                from = random.nextInt(n);
+                to = random.nextInt(n);
+            } while (graph[from][to] > 0);
+            int value = 1 + random.nextInt(100);
+            graph[from][to] = value;
         }
     }
-    
+
     public synchronized Optional<Token> takeTokenWithFirst(int first) {
-        for (int i = 0; i < tokens.size(); ++i) {
-            if (tokens.get(i).getFirst() == first) {
-                return Optional.of(tokens.remove(i));
+        for (int second = 1; second <= graph.length; ++second) {
+            if (graph[first - 1][second - 1] > 0) {
+                var token = new Token(graph[first - 1][second - 1], first, second);
+                graph[first - 1][second - 1] = 0;
+                return Optional.of(token);
             }
         }
         return Optional.empty();
     }
 
-    public synchronized Optional<Token> takeToken(int position) {
-        if (position < tokens.size()) {
-            return Optional.of(tokens.remove(position));
-        }
-        return Optional.empty();
-    }
-
-    public synchronized boolean tokenExists(Token token) {
-        for (var boardToken : tokens) {
-            if (boardToken.equals(token)) {
-                return true;
+    public synchronized Optional<Token> takeFirstToken() {
+        for (int from = 0; from < graph.length; ++from) {
+            for (int to = 0; to < graph.length; ++to) {
+                if (graph[from][to] > 0) {
+                    var token = new Token(graph[from][to], from + 1, to + 1);
+                    graph[from][to] = 0;
+                    return Optional.of(token);
+                }
             }
         }
-        return false;
-    }
-    
-    public synchronized int size() {
-        return tokens.size();
+        return Optional.empty();
     }
 
     public synchronized boolean isEmpty() {
-        return tokens.isEmpty();
-    }
-
-    @Override
-    public String toString() {
-        return "Board " + tokens;
+        return edges == 0;
     }
 }

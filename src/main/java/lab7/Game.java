@@ -72,6 +72,6 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game [board=" + board + ", players=" + Arrays.toString(players) + "]";
+        return "Game " + Arrays.toString(players);
     }
 }

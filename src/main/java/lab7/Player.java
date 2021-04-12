@@ -25,10 +25,9 @@ public class Player implements Runnable {
         var random = new Random();
         while (!board.isEmpty()) {
             if (tokens.isEmpty()) {
-                var randomPosition = 1 + random.nextInt(board.size());
-                var token = board.takeToken(randomPosition);
-                if (token.isPresent()) {
-                    tokens.add(token.get());
+                var first = board.takeFirstToken();
+                if (first.isPresent()) {
+                    tokens.add(first.get());
                 }
             } else {
                 var randomPosition = random.nextInt(tokens.size());
