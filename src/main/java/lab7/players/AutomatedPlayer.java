@@ -1,63 +1,66 @@
 package lab7.players;
 
+import java.util.Optional;
+
 import lab7.Board;
 import lab7.Token;
 
 public class AutomatedPlayer extends Player {
-    private int size;
     private int playerNumber;
 
     public AutomatedPlayer(Board board) {
         super(board);
-        size = board.getSize();
     }
 
     @Override
     public void run() {
         playerNumber = Integer.parseInt(Thread.currentThread().getName());
         try {
-            OUTER_LOOP: while (!board.isOver()) {
-                var tokens = board.getTakenTokens().get(playerNumber);
-                if (!tokens.isEmpty()) {
-                    for (var token : tokens) {
-                        if (takeChainedToken(token)) {
-                            continue OUTER_LOOP;
-                        }
-                    }
-                }
-                if (takeFirstToken()) {
-                    continue;
-                }
+            while (!board.isOver()) {
+                takeNextToken();
             }
         } catch (InterruptedException e) {
             System.err.println(e);
         }
-        return;
     }
 
-    private boolean takeFirstToken() throws InterruptedException {
-        for (int first = 1; first <= size; ++first) {
-            for (int second = 1; second <= size; ++second) {
-                var optionalToken = board.getTokenAt(first, second);
-                if (optionalToken.isPresent()) {
-                    if (board.takeToken(optionalToken.get())) {
-                        return true;
+    private int getTokenScore(Token token) throws InterruptedException {
+        int result = 0;
+        for (var ourToken : board.getTakenTokens().get(playerNumber)) {
+            if (ourToken.getSecond() == token.getFirst()) {
+                result += token.getValue() * 2;
+            }
+        }
+        for (int player = 0; player < board.getTakenTokens().size(); ++player) {
+            if (player == playerNumber) {
+                continue;
+            }
+            for (var othersToken : board.getTakenTokens().get(player)) {
+                if (othersToken.getSecond() == token.getFirst()) {
+                    result += token.getValue();
+                }
+            }
+        }
+        return result;
+    }
+
+    private void takeNextToken() throws InterruptedException {
+        int maxScore = -1;
+        Optional<Token> maxToken = Optional.empty();
+        for (int first = 1; first <= board.getSize(); ++first) {
+            for (int second = 1; second <= board.getSize(); ++second) {
+                var token = board.getTokenAt(first, second);
+                if (token.isPresent()) {
+                    int score = getTokenScore(token.get());
+                    if (score > maxScore) {
+                        maxScore = score;
+                        maxToken = token;
                     }
                 }
             }
         }
-        return false;
-    }
-
-    private boolean takeChainedToken(Token token) throws InterruptedException {
-        for (int second = 1; second <= size; ++second) {
-            var optionalToken = board.getTokenAt(token.getFirst(), second);
-            if (optionalToken.isPresent()) {
-                if (board.takeToken(optionalToken.get())) {
-                    return true;
-                }
-            }
+        if (maxToken.isPresent()) {
+            board.takeToken(maxToken.get());
         }
-        return false;
     }
 }

@@ -28,7 +28,6 @@ public class TimeKeeper implements Runnable {
             synchronized (board) {
                 while (!board.isOver()) {
                     long millisElapsed = System.currentTimeMillis() - startTime;
-                    System.out.println(millisElapsed);
                     board.wait(Math.max(timeLimit - millisElapsed, 0));
                     millisElapsed = System.currentTimeMillis() - startTime;
                     if (millisElapsed >= timeLimit) {
