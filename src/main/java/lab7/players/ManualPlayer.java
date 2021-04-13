@@ -26,13 +26,17 @@ public class ManualPlayer extends Player {
                     try {
                         first = Integer.parseInt(scanner.next());
                         second = Integer.parseInt(scanner.next());
-                        var token = board.getTokenAt(first, second).get();
-                        tokens.add(token);
-                        board.takeToken(token);
                         break;
                     } catch (NumberFormatException e) {
                         System.err.println("Invalid input");
                     }
+                }
+                var token = board.getTokenAt(first, second);
+                if (token.isEmpty()) {
+                    System.err.println("Token doesn't exist");
+                }
+                if (board.takeToken(token.get())) {
+                    tokens.add(token.get());
                 }
             } catch (InterruptedException e) {
                 System.err.println(e);

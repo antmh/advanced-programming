@@ -17,7 +17,7 @@ public class Score {
         this.tokens = tokens;
         calculate();
     }
-    
+
     public int getValue() {
         return score;
     }

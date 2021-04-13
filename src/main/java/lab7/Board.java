@@ -12,6 +12,7 @@ public class Board {
     private int players;
     private final int MAXIMUM_TURNS = 10;
     private int turns;
+    private boolean ended;
 
     public Board(int tokensNumber, int n, int players) {
         if (n < 1) {
@@ -85,12 +86,20 @@ public class Board {
         return true;
     }
 
+    public synchronized void end() {
+        if (!Thread.currentThread().getName().equals("timekeeper")) {
+            throw new IllegalCallerException("Thread who is not timekeeper tried to end");
+        }
+        ended = true;
+        notifyAll();
+    }
+
     public synchronized int getSize() {
         return graph.length;
     }
 
     public synchronized boolean isOver() {
-        if (edges == 0 || turns == MAXIMUM_TURNS) {
+        if (ended || edges == 0 || turns == MAXIMUM_TURNS) {
             notifyAll();
             return true;
         }

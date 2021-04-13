@@ -28,12 +28,15 @@ public class Game {
             threads.add(new Thread(players[i], Integer.toString(i)));
             threads.get(i).start();
         }
-        for (int i = 0; i < playersNumber; ++i) {
-            try {
+        var timeKeeperThread = new Thread(new TimeKeeper(board), "timekeeper");
+        timeKeeperThread.start();
+        try {
+            for (int i = 0; i < playersNumber; ++i) {
                 threads.get(i).join();
-            } catch (InterruptedException e) {
-                System.err.println(e);
             }
+            timeKeeperThread.join();
+        } catch (InterruptedException e) {
+            System.err.println(e);
         }
     }
 
