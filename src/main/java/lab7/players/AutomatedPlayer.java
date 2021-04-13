@@ -63,4 +63,9 @@ public class AutomatedPlayer extends Player {
             board.takeToken(maxToken.get());
         }
     }
+
+    @Override
+    public String toString() {
+        return "AutomatedPlayer [name=" + name + "]";
+    }
 }

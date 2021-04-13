@@ -55,4 +55,9 @@ public class ManualPlayer extends Player {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "ManualPlayer [name=" + name + "]";
+    }
 }
