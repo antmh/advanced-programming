@@ -5,10 +5,10 @@ import java.util.Optional;
 import lab7.Board;
 import lab7.Token;
 
-public class AutomatedPlayer extends Player {
+public class SmartPlayer extends Player {
     private int playerNumber;
 
-    public AutomatedPlayer(Board board) {
+    public SmartPlayer(Board board) {
         super(board);
     }
 
@@ -66,6 +66,6 @@ public class AutomatedPlayer extends Player {
 
     @Override
     public String toString() {
-        return "AutomatedPlayer [name=" + name + "]";
+        return "SmartPlayer [name=" + name + "]";
     }
 }
