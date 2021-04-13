@@ -1,10 +1,9 @@
 package lab7;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Game {
     private Board board;
@@ -14,19 +13,22 @@ public class Game {
     private int playersNumber;
 
     public void play() {
-        board = new Board(tokensNumber, n);
+        board = new Board(tokensNumber, n, playersNumber);
         players = new Player[playersNumber];
         for (int i = 0; i < playersNumber; ++i) {
             players[i] = new Player(board);
         }
-        ExecutorService executor = Executors.newFixedThreadPool(playersNumber);
-        for (var player : players) {
-            executor.execute(player);
+        List<Thread> threads = new ArrayList<>(playersNumber);
+        for (int i = 0; i < playersNumber; ++i) {
+            threads.add(new Thread(players[i], Integer.toString(i)));
+            threads.get(i).start();
         }
-        try {
-            executor.awaitTermination(100, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            System.err.println(e);
+        for (int i = 0; i < playersNumber; ++i) {
+            try {
+                threads.get(i).join();
+            } catch (InterruptedException e) {
+                System.err.println(e);
+            }
         }
     }
 
@@ -77,15 +79,7 @@ public class Game {
         }
     }
 
-    public Board getBoard() {
-        return board;
-    }
-
-    public Player[] getPlayers() {
-        return players;
-    }
-
-    public Set<Player> getWinners() {
+    private Set<Player> getWinners() {
         int maxScore = 0;
         Set<Player> winners = new HashSet<>();
         for (var player : players) {

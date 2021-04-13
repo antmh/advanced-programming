@@ -10,14 +10,14 @@ public class Score {
     private List<Token> tokens;
     private int score;
     List<Token> chain;
-    
+
     public Score(List<Token> tokens) {
         if (tokens == null) {
             throw new IllegalArgumentException("tokens cannot be null");
         }
         this.tokens = tokens;
     }
-    
+
     public int calculate() {
         score = 0;
         chain = new ArrayList<>(tokens.size());
@@ -36,7 +36,7 @@ public class Score {
         }
         return score;
     }
-    
+
     private void explore() {
         for (int token = 0; token < tokens.size(); ++token) {
             if (!visited[token] && chain.get(chain.size() - 1).getSecond() == tokens.get(token).getFirst()) {
@@ -53,7 +53,7 @@ public class Score {
         }
         chain.remove(chain.size() - 1);
     }
-    
+
     private int getChainSegmentScore(int first, int last) {
         int score = 0;
         for (int i = first; i <= last; ++i) {

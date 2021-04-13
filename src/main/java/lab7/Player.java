@@ -2,7 +2,6 @@ package lab7;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.github.javafaker.Faker;
 
@@ -22,25 +21,25 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
-        var random = new Random();
-        while (!board.isEmpty()) {
-            if (tokens.isEmpty()) {
+        try {
+            OUTER_LOOP: while (!board.isOver()) {
+                if (!tokens.isEmpty()) {
+                    for (var token : tokens) {
+                        var taken = board.takeTokenWithFirst(token.getSecond());
+                        if (taken.isPresent()) {
+                            tokens.add(taken.get());
+                            continue OUTER_LOOP;
+                        }
+                    }
+                }
                 var first = board.takeFirstToken();
                 if (first.isPresent()) {
                     tokens.add(first.get());
-                }
-            } else {
-                var randomPosition = random.nextInt(tokens.size());
-                var token = board.takeTokenWithFirst(tokens.get(randomPosition).getSecond());
-                if (token.isPresent()) {
-                    tokens.add(token.get());
+                    continue;
                 }
             }
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                System.err.println(e);
-            }
+        } catch (InterruptedException e) {
+            System.err.println(e);
         }
     }
 
