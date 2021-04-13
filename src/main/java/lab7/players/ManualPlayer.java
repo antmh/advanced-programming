@@ -34,9 +34,8 @@ public class ManualPlayer extends Player {
                 var token = board.getTokenAt(first, second);
                 if (token.isEmpty()) {
                     System.err.println("Token doesn't exist");
-                }
-                if (board.takeToken(token.get())) {
-                    tokens.add(token.get());
+                } else if (!board.takeToken(token.get())) {
+                    System.err.println("Could not take token");
                 }
             } catch (InterruptedException e) {
                 System.err.println(e);

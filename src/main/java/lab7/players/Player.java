@@ -1,16 +1,11 @@
 package lab7.players;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.javafaker.Faker;
 
 import lab7.Board;
-import lab7.Token;
 
 public abstract class Player implements Runnable {
     protected String name;
-    protected List<Token> tokens;
     protected Board board;
 
     public Player(Board board) {
@@ -19,7 +14,6 @@ public abstract class Player implements Runnable {
         }
         this.board = board;
         name = Faker.instance().name().fullName();
-        tokens = new ArrayList<>();
     }
 
     public String getName() {
@@ -30,16 +24,8 @@ public abstract class Player implements Runnable {
         this.name = name;
     }
 
-    public List<Token> getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(List<Token> tokens) {
-        this.tokens = tokens;
-    }
-
     @Override
     public String toString() {
-        return "Player [name=" + name + ", tokens=" + tokens + "]";
+        return "Player [name=" + name + "]";
     }
 }

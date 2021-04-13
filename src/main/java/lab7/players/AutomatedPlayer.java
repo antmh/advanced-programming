@@ -1,12 +1,11 @@
 package lab7.players;
 
-import java.util.Optional;
-
 import lab7.Board;
 import lab7.Token;
 
 public class AutomatedPlayer extends Player {
     private int size;
+    private int playerNumber;
 
     public AutomatedPlayer(Board board) {
         super(board);
@@ -15,20 +14,18 @@ public class AutomatedPlayer extends Player {
 
     @Override
     public void run() {
+        playerNumber = Integer.parseInt(Thread.currentThread().getName());
         try {
             OUTER_LOOP: while (!board.isOver()) {
+                var tokens = board.getTakenTokens().get(playerNumber);
                 if (!tokens.isEmpty()) {
                     for (var token : tokens) {
-                        var taken = takeChainedToken(token);
-                        if (taken.isPresent()) {
-                            tokens.add(taken.get());
+                        if (takeChainedToken(token)) {
                             continue OUTER_LOOP;
                         }
                     }
                 }
-                var first = takeFirstToken();
-                if (first.isPresent()) {
-                    tokens.add(first.get());
+                if (takeFirstToken()) {
                     continue;
                 }
             }
@@ -38,31 +35,29 @@ public class AutomatedPlayer extends Player {
         return;
     }
 
-    private Optional<Token> takeFirstToken() throws InterruptedException {
+    private boolean takeFirstToken() throws InterruptedException {
         for (int first = 1; first <= size; ++first) {
             for (int second = 1; second <= size; ++second) {
                 var optionalToken = board.getTokenAt(first, second);
                 if (optionalToken.isPresent()) {
-                    var result = optionalToken.get();
-                    if (board.takeToken(result)) {
-                        return Optional.of(result);
+                    if (board.takeToken(optionalToken.get())) {
+                        return true;
                     }
                 }
             }
         }
-        return Optional.empty();
+        return false;
     }
 
-    private Optional<Token> takeChainedToken(Token token) throws InterruptedException {
+    private boolean takeChainedToken(Token token) throws InterruptedException {
         for (int second = 1; second <= size; ++second) {
             var optionalToken = board.getTokenAt(token.getFirst(), second);
             if (optionalToken.isPresent()) {
-                var result = optionalToken.get();
-                if (board.takeToken(result)) {
-                    return Optional.of(result);
+                if (board.takeToken(optionalToken.get())) {
+                    return true;
                 }
             }
         }
-        return Optional.empty();
+        return false;
     }
 }

@@ -1,18 +1,23 @@
 package lab7;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
 public class Board {
     private int graph[][];
     private Random random;
     private int edges;
     private int currentPlayer;
-    private int players;
+    private int playersNumber;
     private final int MAXIMUM_TURNS = 10;
     private int turns;
     private boolean ended;
+    private List<Set<Token>> takenTokens;
 
     public Board(int tokensNumber, int n, int players) {
         if (n < 1) {
@@ -21,13 +26,17 @@ public class Board {
         if (tokensNumber < 0) {
             throw new IllegalArgumentException("The number of tokens must be positive");
         }
-        this.players = players;
+        this.playersNumber = players;
         currentPlayer = 0;
         turns = 0;
         edges = tokensNumber;
         graph = new int[n][n];
         for (int i = 0; i < n; ++i) {
             Arrays.fill(graph[i], 0);
+        }
+        takenTokens = new ArrayList<>(players);
+        for (int i = 0; i < players; ++i) {
+            takenTokens.add(new HashSet<>());
         }
         random = new Random();
         for (int i = 0; i < tokensNumber; ++i) {
@@ -55,7 +64,7 @@ public class Board {
     }
 
     private void finishTurn() {
-        currentPlayer = (currentPlayer + 1) % players;
+        currentPlayer = (currentPlayer + 1) % playersNumber;
         if (currentPlayer == 0) {
             ++turns;
         }
@@ -80,7 +89,14 @@ public class Board {
         if (!takeTurn() || graph[token.getFirst() - 1][token.getSecond() - 1] != token.getValue()) {
             return false;
         }
+        int tokenNumber;
+        try {
+            tokenNumber = Integer.parseInt(Thread.currentThread().getName());
+        } catch (NumberFormatException e) {
+            throw new IllegalCallerException("Thread is not a player");
+        }
         graph[token.getFirst() - 1][token.getSecond() - 1] = 0;
+        takenTokens.get(tokenNumber).add(token);
         --edges;
         finishTurn();
         return true;
@@ -96,6 +112,10 @@ public class Board {
 
     public synchronized int getSize() {
         return graph.length;
+    }
+
+    public synchronized List<Set<Token>> getTakenTokens() {
+        return takenTokens;
     }
 
     public synchronized boolean isOver() {

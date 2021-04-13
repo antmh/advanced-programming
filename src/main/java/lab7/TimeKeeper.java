@@ -15,7 +15,7 @@ public class TimeKeeper implements Runnable {
             throw new IllegalArgumentException("board cannot be null");
         }
         this.board = board;
-        timeLimit = 5000;
+        timeLimit = 10000;
         secondsElapsed = 0;
     }
 

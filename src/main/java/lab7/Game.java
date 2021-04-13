@@ -75,8 +75,12 @@ public class Game {
 
     public void printResult() {
         System.out.println("Result:");
-        for (var player : players) {
-            System.out.println(player);
+        for (int i = 0; i < playersNumber; ++i) {
+            System.out.print(players[i] + ": ");
+            for (var token : board.getTakenTokens().get(i)) {
+                System.out.print(token + " ");
+            }
+            System.out.println();
         }
     }
 
@@ -90,14 +94,14 @@ public class Game {
     private Set<Player> getWinners() {
         int maxScore = 0;
         Set<Player> winners = new HashSet<>();
-        for (var player : players) {
-            int score = new Score(player.getTokens()).getValue();
+        for (int i = 0; i < playersNumber; ++i) {
+            int score = new Score(board.getTakenTokens().get(i)).getValue();
             if (score > maxScore) {
                 maxScore = score;
                 winners.clear();
-                winners.add(player);
-            } else if (score == maxScore) {
-                winners.add(player);
+            }
+            if (score >= maxScore) {
+                winners.add(players[i]);
             }
         }
         return winners;
