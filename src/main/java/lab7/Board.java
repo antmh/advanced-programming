@@ -40,12 +40,14 @@ public class Board {
         }
     }
 
-    private boolean takeTurn() throws InterruptedException {
+    public synchronized boolean takeTurn() throws InterruptedException {
         if (isOver()) {
-            finishTurn();
             return false;
         }
-        while (Thread.currentThread().getName().equals(Integer.toString(currentPlayer))) {
+        while (!Thread.currentThread().getName().equals(Integer.toString(currentPlayer))) {
+            if (isOver()) {
+                return false;
+            }
             wait();
         }
         return true;
@@ -53,45 +55,45 @@ public class Board {
 
     private void finishTurn() {
         currentPlayer = (currentPlayer + 1) % players;
-        ++turns;
+        if (currentPlayer == 0) {
+            ++turns;
+        }
         notifyAll();
     }
 
-    public synchronized Optional<Token> takeTokenWithFirst(int first) throws InterruptedException {
-        if (!takeTurn()) {
-            return Optional.empty();
+    public synchronized Optional<Token> getTokenAt(int first, int second) {
+        if (first < 1 || first > graph.length || second < 1 || second > graph.length) {
+            throw new IllegalArgumentException("Token out of range");
         }
-        for (int second = 1; second <= graph.length; ++second) {
-            if (graph[first - 1][second - 1] > 0) {
-                var token = new Token(graph[first - 1][second - 1], first, second);
-                graph[first - 1][second - 1] = 0;
-                --edges;
-                finishTurn();
-                return Optional.of(token);
-            }
+        if (graph[first - 1][second - 1] > 0) {
+            return Optional.of(new Token(graph[first - 1][second - 1], first, second));
         }
         return Optional.empty();
     }
 
-    public synchronized Optional<Token> takeFirstToken() throws InterruptedException {
-        if (!takeTurn()) {
-            return Optional.empty();
+    public synchronized boolean takeToken(Token token) throws InterruptedException {
+        if (token.getFirst() < 1 || token.getFirst() > graph.length || token.getSecond() < 1
+                || token.getSecond() > graph.length || token.getValue() == 0) {
+            throw new IllegalArgumentException("Token out of range");
         }
-        for (int from = 0; from < graph.length; ++from) {
-            for (int to = 0; to < graph.length; ++to) {
-                if (graph[from][to] > 0) {
-                    var token = new Token(graph[from][to], from + 1, to + 1);
-                    graph[from][to] = 0;
-                    --edges;
-                    finishTurn();
-                    return Optional.of(token);
-                }
-            }
+        if (!takeTurn() || graph[token.getFirst() - 1][token.getSecond() - 1] != token.getValue()) {
+            return false;
         }
-        return Optional.empty();
+        graph[token.getFirst() - 1][token.getSecond() - 1] = 0;
+        --edges;
+        finishTurn();
+        return true;
+    }
+
+    public synchronized int getSize() {
+        return graph.length;
     }
 
     public synchronized boolean isOver() {
-        return edges == 0 || turns == MAXIMUM_TURNS;
+        if (edges == 0 || turns == MAXIMUM_TURNS) {
+            notifyAll();
+            return true;
+        }
+        return false;
     }
 }

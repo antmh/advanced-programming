@@ -2,23 +2,27 @@ package lab7;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Arrays;
 
 public class Score {
     private boolean visited[];
     private List<Token> tokens;
     private int score;
-    List<Token> chain;
+    private List<Token> chain;
 
     public Score(List<Token> tokens) {
         if (tokens == null) {
             throw new IllegalArgumentException("tokens cannot be null");
         }
         this.tokens = tokens;
+        calculate();
+    }
+    
+    public int getValue() {
+        return score;
     }
 
-    public int calculate() {
+    private void calculate() {
         score = 0;
         chain = new ArrayList<>(tokens.size());
         visited = new boolean[tokens.size()];
@@ -34,7 +38,6 @@ public class Score {
             }
             break;
         }
-        return score;
     }
 
     private void explore() {

@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import lab7.players.AutomatedPlayer;
+import lab7.players.ManualPlayer;
+import lab7.players.Player;
+
 public class Game {
     private Board board;
     private Player[] players;
@@ -15,9 +19,10 @@ public class Game {
     public void play() {
         board = new Board(tokensNumber, n, playersNumber);
         players = new Player[playersNumber];
-        for (int i = 0; i < playersNumber; ++i) {
-            players[i] = new Player(board);
+        for (int i = 0; i < playersNumber - 1; ++i) {
+            players[i] = new AutomatedPlayer(board);
         }
+        players[playersNumber - 1] = new ManualPlayer(board);
         List<Thread> threads = new ArrayList<>(playersNumber);
         for (int i = 0; i < playersNumber; ++i) {
             threads.add(new Thread(players[i], Integer.toString(i)));
@@ -83,7 +88,7 @@ public class Game {
         int maxScore = 0;
         Set<Player> winners = new HashSet<>();
         for (var player : players) {
-            int score = new Score(player.getTokens()).calculate();
+            int score = new Score(player.getTokens()).getValue();
             if (score > maxScore) {
                 maxScore = score;
                 winners.clear();
