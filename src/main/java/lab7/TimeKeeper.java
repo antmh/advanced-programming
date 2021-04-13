@@ -23,8 +23,19 @@ public class TimeKeeper implements Runnable {
     public void run() {
         ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
         ScheduledFuture<?> printTask = executor.scheduleAtFixedRate(this::print, 1, 1, TimeUnit.SECONDS);
+        long startTime = System.currentTimeMillis();
         try {
-            Thread.sleep(timeLimit);
+            synchronized (board) {
+                while (!board.isOver()) {
+                    long millisElapsed = System.currentTimeMillis() - startTime;
+                    System.out.println(millisElapsed);
+                    board.wait(Math.max(timeLimit - millisElapsed, 0));
+                    millisElapsed = System.currentTimeMillis() - startTime;
+                    if (millisElapsed >= timeLimit) {
+                        break;
+                    }
+                }
+            }
             printTask.cancel(false);
             executor.shutdown();
         } catch (InterruptedException e) {
