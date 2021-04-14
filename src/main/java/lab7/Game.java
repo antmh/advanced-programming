@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import lab7.players.SmartPlayer;
+import lab7.scoring.Scoring;
 import lab7.players.ManualPlayer;
 import lab7.players.Player;
 import lab7.players.RandomPlayer;
@@ -18,6 +19,7 @@ public class Game {
     private int smartPlayers;
     private int randomPlayers;
     private boolean manualPlayer;
+    private Scoring scoring;
 
     public void play() {
         board = new Board(tokensNumber, n, getPlayersNumber());
@@ -45,6 +47,24 @@ public class Game {
             timeKeeperThread.join();
         } catch (InterruptedException e) {
             System.err.println(e);
+        }
+    }
+
+    public void printResult() {
+        System.out.println("Result:");
+        for (int i = 0; i < getPlayersNumber(); ++i) {
+            System.out.print(players[i] + ": ");
+            for (var token : board.getTakenTokens().get(i)) {
+                System.out.print(token + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void printWinners() {
+        System.out.println("Winners:");
+        for (var winner : getWinners()) {
+            System.out.println(winner.getName());
         }
     }
 
@@ -94,33 +114,23 @@ public class Game {
         this.manualPlayer = manualPlayer;
     }
 
+    public Scoring getScoring() {
+        return scoring;
+    }
+
+    public void setScoring(Scoring scoring) {
+        this.scoring = scoring;
+    }
+
     public int getPlayersNumber() {
         return smartPlayers + randomPlayers + (manualPlayer ? 1 : 0);
-    }
-
-    public void printResult() {
-        System.out.println("Result:");
-        for (int i = 0; i < getPlayersNumber(); ++i) {
-            System.out.print(players[i] + ": ");
-            for (var token : board.getTakenTokens().get(i)) {
-                System.out.print(token + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public void printWinners() {
-        System.out.println("Winners:");
-        for (var winner : getWinners()) {
-            System.out.println(winner.getName());
-        }
     }
 
     private Set<Player> getWinners() {
         int maxScore = 0;
         Set<Player> winners = new HashSet<>();
         for (int i = 0; i < getPlayersNumber(); ++i) {
-            int score = new Score(board.getTakenTokens().get(i)).getValue();
+            int score = scoring.calculate(board.getTakenTokens().get(i));
             if (score > maxScore) {
                 maxScore = score;
                 winners.clear();
