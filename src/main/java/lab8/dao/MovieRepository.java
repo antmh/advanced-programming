@@ -81,6 +81,7 @@ public class MovieRepository implements Repository<Movie> {
             ResultSet results = statement.executeQuery();
             while (results.next()) {
                 Movie movie = new Movie();
+                movie.setTitle(title);
                 movie.setId(Optional.of(results.getInt("id")));
                 movie.setDate(results.getDate("release_date"));
                 movie.setDuration(results.getInt("duration"));
