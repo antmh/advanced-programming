@@ -9,4 +9,9 @@ public class SequenceLengthScoring extends Scoring {
     protected int sequenceScore(List<Token> sequence) {
         return sequence.size();
     }
+
+    @Override
+    public String toString() {
+        return "Sequence length scoring";
+    }
 }

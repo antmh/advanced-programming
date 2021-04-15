@@ -9,4 +9,9 @@ public class SequenceValueScoring extends Scoring {
     protected int sequenceScore(List<Token> sequence) {
         return sequence.stream().map(Token::getValue).reduce(Integer::sum).get();
     }
+
+    @Override
+    public String toString() {
+        return "Sequence value scoring";
+    }
 }

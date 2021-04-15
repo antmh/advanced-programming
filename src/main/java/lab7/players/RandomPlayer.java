@@ -2,13 +2,7 @@ package lab7.players;
 
 import java.util.Random;
 
-import lab7.Board;
-
 public class RandomPlayer extends Player {
-    public RandomPlayer(Board board) {
-        super(board);
-    }
-
     @Override
     public void run() {
         try {
@@ -28,6 +22,6 @@ public class RandomPlayer extends Player {
 
     @Override
     public String toString() {
-        return "RandomPlayer [name=" + name + "]";
+        return "Random player " + name;
     }
 }

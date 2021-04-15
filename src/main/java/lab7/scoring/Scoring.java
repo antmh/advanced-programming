@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import lab7.Game;
 import lab7.Token;
 
 public abstract class Scoring {
@@ -12,6 +13,7 @@ public abstract class Scoring {
     private Token[] tokens;
     private int maxScore;
     private List<Token> sequence;
+    protected Game game;
 
     public final int calculate(Set<Token> taken) {
         if (taken == null) {
@@ -56,5 +58,13 @@ public abstract class Scoring {
             }
         }
         sequence.remove(sequence.size() - 1);
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

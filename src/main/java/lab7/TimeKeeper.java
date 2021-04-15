@@ -10,19 +10,22 @@ public class TimeKeeper implements Runnable {
     private long timeLimit;
     private int secondsElapsed;
 
-    public TimeKeeper(Board board) {
+    public TimeKeeper(Board board, long timeLimit) {
         if (board == null) {
             throw new IllegalArgumentException("board cannot be null");
         }
+        if (timeLimit < 0) {
+            throw new IllegalArgumentException("timeLimit cannot be negative");
+        }
         this.board = board;
-        timeLimit = 10000;
+        this.timeLimit = timeLimit;
         secondsElapsed = 0;
     }
 
     @Override
     public void run() {
         ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
-        ScheduledFuture<?> printTask = executor.scheduleAtFixedRate(this::print, 1, 1, TimeUnit.SECONDS);
+        ScheduledFuture<?> printTask = executor.scheduleAtFixedRate(this::update, 1, 1, TimeUnit.SECONDS);
         long startTime = System.currentTimeMillis();
         try {
             synchronized (board) {
@@ -43,19 +46,11 @@ public class TimeKeeper implements Runnable {
         board.end();
     }
 
-    private void print() {
+    private void update() {
         ++secondsElapsed;
-        System.out.println(secondsElapsed + " seconds elapsed");
     }
-
-    public long getTimeLimit() {
-        return timeLimit;
-    }
-
-    public void setTimeLimit(long timeLimit) {
-        if (timeLimit < 0) {
-            throw new IllegalArgumentException("timeLimit cannot be negative");
-        }
-        this.timeLimit = timeLimit;
+    
+    public synchronized int getSecondsElapsed() {
+        return secondsElapsed;
     }
 }

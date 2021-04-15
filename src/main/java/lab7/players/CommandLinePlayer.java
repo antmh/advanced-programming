@@ -2,18 +2,12 @@ package lab7.players;
 
 import java.util.Scanner;
 
-import lab7.Board;
-
-public class ManualPlayer extends Player {
-    int size;
-
-    public ManualPlayer(Board board) {
-        super(board);
-        size = board.getSize();
-    }
+public class CommandLinePlayer extends Player {
+    private int size;
 
     @Override
     public void run() {
+        size = board.getSize();
         var scanner = new Scanner(System.in);
         while (true) {
             try {
@@ -58,6 +52,6 @@ public class ManualPlayer extends Player {
 
     @Override
     public String toString() {
-        return "ManualPlayer [name=" + name + "]";
+        return "Command line player " + name;
     }
 }

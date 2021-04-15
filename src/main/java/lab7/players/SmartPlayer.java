@@ -2,22 +2,19 @@ package lab7.players;
 
 import java.util.Optional;
 
-import lab7.Board;
 import lab7.Token;
 
 public class SmartPlayer extends Player {
     private int playerNumber;
-
-    public SmartPlayer(Board board) {
-        super(board);
-    }
 
     @Override
     public void run() {
         playerNumber = Integer.parseInt(Thread.currentThread().getName());
         try {
             while (!board.isOver()) {
-                takeNextToken();
+                if (board.takeTurn()) {
+                    takeNextToken();
+                }
             }
         } catch (InterruptedException e) {
             System.err.println(e);
@@ -66,6 +63,6 @@ public class SmartPlayer extends Player {
 
     @Override
     public String toString() {
-        return "SmartPlayer [name=" + name + "]";
+        return "Smart player " + name;
     }
 }

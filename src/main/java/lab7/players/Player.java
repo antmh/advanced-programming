@@ -8,11 +8,7 @@ public abstract class Player implements Runnable {
     protected String name;
     protected Board board;
 
-    public Player(Board board) {
-        if (board == null) {
-            throw new IllegalArgumentException("board cannot be null");
-        }
-        this.board = board;
+    public Player() {
         name = Faker.instance().name().fullName();
     }
 
@@ -22,6 +18,14 @@ public abstract class Player implements Runnable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     @Override
