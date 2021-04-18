@@ -1,6 +1,8 @@
 package lab8.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class Movie {
@@ -9,9 +11,11 @@ public class Movie {
     private int duration;
     private double score;
     private Optional<Integer> id;
+    private List<Genre> genres;
     
     public Movie() {
         id = Optional.empty();
+        genres = new ArrayList<>();
     }
 
     public Optional<Integer> getId() {
@@ -58,5 +62,13 @@ public class Movie {
             throw new IllegalArgumentException("score must be between 1 and 5");
         }
         this.score = score;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 }

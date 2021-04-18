@@ -19,6 +19,10 @@ public class MovieRepository implements Repository<Movie> {
             + "WHERE id = ?";
     private static final String FIND_TITLE_STATEMENT = "SELECT id, release_date, duration, score FROM movies "
             + "WHERE TITLE = ?";
+    private static final String DELETE_GENRES_STATEMENT = "DELETE FROM movies_genres_assoc WHERE movie_id = ?";
+    private static final String INSERT_GENRE_STATEMENT = "INSERT INTO movies_genres_assoc (movie_id, genre_id) "
+            + "VALUES (?, ?)";
+    private static final String SELECT_GENRES_STATEMENT = "SELECT genre_id FROM movies_genres_assoc WHERE movie_id = ?";
 
     @Override
     public void create(Movie item) {
@@ -38,6 +42,15 @@ public class MovieRepository implements Repository<Movie> {
             setStatement(statement, item);
             statement.setInt(5, item.getId().get());
             statement.execute();
+            statement = MoviesConnection.getInstance().prepareStatement(DELETE_GENRES_STATEMENT);
+            statement.setInt(1, item.getId().get());
+            statement.execute();
+            for (var genre : item.getGenres()) {
+                statement = MoviesConnection.getInstance().prepareStatement(INSERT_GENRE_STATEMENT);
+                statement.setInt(1, item.getId().get());
+                statement.setInt(2, genre.getId().get());
+                statement.execute();
+            }
         } catch (SQLException e) {
             System.err.println(e);
         }
@@ -66,6 +79,7 @@ public class MovieRepository implements Repository<Movie> {
                 movie.setDate(results.getDate("release_date"));
                 movie.setDuration(results.getInt("duration"));
                 movie.setScore(results.getDouble("score"));
+                updateGenres(movie);
                 return Optional.of(movie);
             }
         } catch (SQLException e) {
@@ -86,6 +100,7 @@ public class MovieRepository implements Repository<Movie> {
                 movie.setDate(results.getDate("release_date"));
                 movie.setDuration(results.getInt("duration"));
                 movie.setScore(results.getDouble("score"));
+                updateGenres(movie);
                 return Optional.of(movie);
             }
         } catch (SQLException e) {
@@ -99,5 +114,17 @@ public class MovieRepository implements Repository<Movie> {
         statement.setDate(2, new Date(item.getDate().getTime()));
         statement.setInt(3, item.getDuration());
         statement.setDouble(4, item.getScore());
+    }
+    
+    private void updateGenres(Movie movie) throws SQLException {
+        PreparedStatement statement = MoviesConnection.getInstance().prepareStatement(SELECT_GENRES_STATEMENT);
+        statement.setInt(1, movie.getId().get());
+        var results = statement.executeQuery();
+        var genreRepository = new GenreRepository();
+        movie.getGenres().clear();
+        while (results.next()) {
+            int id = results.getInt("genre_id");
+            movie.getGenres().add(genreRepository.findById(id).get());
+        }
     }
 }
