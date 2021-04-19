@@ -1,28 +1,25 @@
 package lab8.model;
 
-import java.util.Optional;
-
 public class Genre {
-    private String name;
-    private Optional<Integer> id;
+	private String name;
+	private int id;
 
-    public Genre() {
-        id = Optional.empty();
-    }
+	public Genre() {
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Optional<Integer> getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(Optional<Integer> id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 }

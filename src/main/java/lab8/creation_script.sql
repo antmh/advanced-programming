@@ -23,3 +23,36 @@ CREATE TABLE IF NOT EXISTS movies_genres_assoc (
       REFERENCES genres (id)
       ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS people (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  family_name TEXT,
+  given_name TEXT,
+  date_of_birth DATE
+);
+
+CREATE TABLE IF NOT EXISTS actors (
+  movie_id INT,
+  person_id INT,
+  CONSTRAINT fk_movie
+    FOREIGN KEY (movie_id)
+      REFERENCES movies (id)
+      ON DELETE CASCADE,
+  CONSTRAINT fk_person
+    FOREIGN KEY (person_id)
+      REFERENCES people (id)
+      ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS directors (
+  movie_id INT,
+  person_id INT,
+  CONSTRAINT fk_movie
+    FOREIGN KEY (movie_id)
+      REFERENCES movies (id)
+      ON DELETE CASCADE,
+  CONSTRAINT fk_person
+    FOREIGN KEY (person_id)
+      REFERENCES people (id)
+      ON DELETE CASCADE
+);
