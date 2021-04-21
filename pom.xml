@@ -63,6 +63,11 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.19</version>
         </dependency>
+        <dependency>
+			<groupId>com.bordercloud</groupId>
+  			<artifactId>SPARQL-JAVA</artifactId>
+  			<version>1.0.9</version>
+		</dependency>
     </dependencies>
     <build>
         <plugins>
