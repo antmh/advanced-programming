@@ -33,6 +33,12 @@ public class MovieRepository implements Repository<Movie> {
 			var results = statement.getResultSet();
 			results.next();
 			item.setId(results.getInt("id"));
+			for (var genre : item.getGenres()) {
+				statement = MoviesConnection.getInstance().prepareStatement(INSERT_GENRE_STATEMENT);
+				statement.setInt(1, item.getId());
+				statement.setInt(2, genre.getId());
+				statement.execute();
+			}
 		} catch (SQLException e) {
 			System.err.println(e);
 		}

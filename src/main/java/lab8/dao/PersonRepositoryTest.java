@@ -14,8 +14,7 @@ public class PersonRepositoryTest {
 	@Test
 	void delete() {
 		var person = new Person();
-		person.setFamilyName("last name");
-		person.setGivenName("first name");
+		person.setName("name");
 		person.setDateOfBirth(new Date());
 		repository.create(person);
 		repository.delete(person);
@@ -31,8 +30,7 @@ public class PersonRepositoryTest {
 		movie.setTitle("title");
 		movieRepository.create(movie);
 		var person = new Person();
-		person.setFamilyName("last name");
-		person.setGivenName("first name");
+		person.setName("name");
 		person.setDateOfBirth(new Date());
 		var actor = new Actor();
 		actor.setMovieActedIn(movie);

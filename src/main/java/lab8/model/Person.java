@@ -6,8 +6,7 @@ import java.util.List;
 
 public class Person {
 	private int id;
-	private String familyName;
-	private String givenName;
+	private String name;
 	private Date dateOfBirth;
 	private List<Role> roles;
 
@@ -23,20 +22,12 @@ public class Person {
 		this.id = id;
 	}
 
-	public String getFamilyName() {
-		return familyName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFamilyName(String familyName) {
-		this.familyName = familyName;
-	}
-
-	public String getGivenName() {
-		return givenName;
-	}
-
-	public void setGivenName(String givenName) {
-		this.givenName = givenName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Date getDateOfBirth() {

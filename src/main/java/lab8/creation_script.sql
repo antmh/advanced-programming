@@ -26,8 +26,7 @@ CREATE TABLE IF NOT EXISTS movies_genres_assoc (
 
 CREATE TABLE IF NOT EXISTS people (
   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  family_name TEXT,
-  given_name TEXT,
+  name TEXT,
   date_of_birth DATE
 );
 

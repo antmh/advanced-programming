@@ -12,17 +12,15 @@ import lab8.model.Director;
 import lab8.model.Person;
 
 public class PersonRepository implements Repository<Person> {
-	private static String CREATE_STATEMENT = "INSERT INTO people (family_name, given_name, date_of_birth) "
-			+ "VALUES (?, ?, ?) RETURNING id";
+	private static String CREATE_STATEMENT = "INSERT INTO people (name, date_of_birth) VALUES (?, ?) RETURNING id";
 	private static String UPDATE_STATEMENT = "UPDATE people SET id = ?";
 	private static String DELETE_STATEMENT = "DELETE FROM people WHERE id = ?";
 	private static String DELETE_ACTORS_STATEMENT = "DELETE FROM actors WHERE person_id = ?";
 	private static String DELETE_DIRECTORS_STATEMENT = "DELETE FROM directors WHERE person_id = ?";
 	private static String INSERT_ACTOR_STATEMENT = "INSERT INTO actors (movie_id, person_id) VALUES (?, ?)";
 	private static String INSERT_DIRECTOR_STATEMENT = "INSERT INTO directors (movie_id, person_id) VALUES (?, ?)";
-	private static String SELECT_ID_STATEMENT = "SELECT family_name, given_name, date_of_birth FROM people WHERE id = ?";
-	private static String SELECT_NAME_STATEMENT = "SELECT id, date_of_birth FROM people "
-			+ "WHERE family_name = ? AND given_name = ?";
+	private static String SELECT_ID_STATEMENT = "SELECT name, date_of_birth FROM people WHERE id = ?";
+	private static String SELECT_NAME_STATEMENT = "SELECT id, date_of_birth FROM people " + "WHERE name = ?";
 	private static String SELECT_MOVIE_ACTED_IN_STATEMENT = "SELECT movie_id FROM actors WHERE person_id = ?";
 	private static String SELECT_MOVIE_DIRECTED_STATEMENT = "SELECT movie_id FROM directors WHERE person_id = ?";
 
@@ -79,8 +77,7 @@ public class PersonRepository implements Repository<Person> {
 				var person = new Person();
 				person.setId(id);
 				person.setDateOfBirth(results.getDate("date_of_birth"));
-				person.setFamilyName(results.getString("family_name"));
-				person.setGivenName(results.getString("given_name"));
+				person.setName(results.getString("name"));
 				getRoles(person);
 				return Optional.of(person);
 			}
@@ -90,16 +87,14 @@ public class PersonRepository implements Repository<Person> {
 		return Optional.empty();
 	}
 
-	public Optional<Person> findByName(String familyName, String givenName) {
+	public Optional<Person> findByName(String name) {
 		try {
 			PreparedStatement statement = MoviesConnection.getInstance().prepareStatement(SELECT_NAME_STATEMENT);
-			statement.setString(1, familyName);
-			statement.setString(2, givenName);
+			statement.setString(1, name);
 			ResultSet results = statement.executeQuery();
 			while (results.next()) {
 				var person = new Person();
-				person.setFamilyName(familyName);
-				person.setGivenName(givenName);
+				person.setName(name);
 				person.setDateOfBirth(results.getDate("date_of_birth"));
 				person.setId(results.getInt("id"));
 				getRoles(person);
@@ -112,9 +107,8 @@ public class PersonRepository implements Repository<Person> {
 	}
 
 	private void setStatement(PreparedStatement statement, Person item) throws SQLException {
-		statement.setString(1, item.getFamilyName());
-		statement.setString(2, item.getGivenName());
-		statement.setDate(3, new Date(item.getDateOfBirth().getTime()));
+		statement.setString(1, item.getName());
+		statement.setDate(2, new Date(item.getDateOfBirth().getTime()));
 	}
 
 	void insertRoles(Person item) throws SQLException {

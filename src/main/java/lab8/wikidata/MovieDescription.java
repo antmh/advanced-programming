@@ -1,6 +1,6 @@
 package lab8.wikidata;
 
-public class Movie {
+public class MovieDescription {
 	private String id;
 	private String description;
 
