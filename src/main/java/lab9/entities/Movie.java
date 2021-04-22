@@ -11,9 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 
+@NamedQuery(name = "findByTitle", query = "SELECT m FROM Movie m WHERE m.title= :title")
 @Entity
 @Table(name = "MOVIES")
 public class Movie {
@@ -37,7 +39,7 @@ public class Movie {
 	@ManyToMany
 	@JoinTable(name = "MOVIES_GENRES_ASSOC", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private Set<Genre> genres;
-	
+
 	public Movie() {
 		genres = new HashSet<>();
 	}
