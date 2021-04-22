@@ -2,7 +2,6 @@ package lab9;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import lab9.entities.Movie;
 import lab9.entities.Person;
@@ -10,7 +9,7 @@ import lab9.entities.Genre;
 
 public class Main {
 	public static void main(String[] args) {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("lab9");
+		EntityManagerFactory factory = MovieManagerFactory.getInstance();
 		EntityManager em = factory.createEntityManager();
 		em.getTransaction().begin();
 		var movie = new Movie();
