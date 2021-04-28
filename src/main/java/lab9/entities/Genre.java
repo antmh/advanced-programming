@@ -5,8 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+@NamedQuery(name = "genre.findById", query = "SELECT g FROM Genre g WHERE g.id = :id")
+@NamedQuery(name = "genre.findByName", query = "SELECT g FROM Genre g WHERE g.name= :name")
 @Entity
 @Table(name = "GENRES")
 public class Genre {

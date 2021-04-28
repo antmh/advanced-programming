@@ -1,9 +1,9 @@
-package lab9;
+package lab9.repositories.jpa;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class MovieManagerFactory {
+class MovieManagerFactory {
 	private static EntityManagerFactory instance;
 	
 	private MovieManagerFactory() {

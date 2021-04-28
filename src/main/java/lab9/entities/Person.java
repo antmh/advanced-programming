@@ -12,8 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+@NamedQuery(name = "person.findById", query = "SELECT p FROM Person p WHERE p.id = :id")
+@NamedQuery(name = "person.findByName", query = "SELECT p FROM Person p WHERE p.name= :name")
 @Entity
 @Table(name = "PEOPLE")
 public class Person {
@@ -27,15 +30,15 @@ public class Person {
 
 	@Column(name = "DATE_OF_BIRTH")
 	private Date dateOfBirth;
-	
+
 	@ManyToMany
 	@JoinTable(name = "ACTORS", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
 	private Set<Movie> moviesActedIn;
-	
+
 	@ManyToMany
 	@JoinTable(name = "DIRECTORS", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
 	private Set<Movie> moviesDirected;
-	
+
 	public Person() {
 		moviesActedIn = new HashSet<>();
 		moviesDirected = new HashSet<>();

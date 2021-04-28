@@ -55,3 +55,24 @@ CREATE TABLE IF NOT EXISTS directors (
       REFERENCES people (id)
       ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS charts (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name TEXT NOT NULL,
+  creation_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS chart_entries (
+  id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  chart_id INT,
+  movie_id INT,
+  score NUMERIC(3, 2),
+  CONSTRAINT fk_chart
+    FOREIGN KEY (chart_id)
+      REFERENCES charts (id)
+      ON DELETE CASCADE,
+  CONSTRAINT fk_movie
+    FOREIGN KEY (movie_id)
+      REFERENCES movies (id)
+      ON DELETE CASCADE
+);

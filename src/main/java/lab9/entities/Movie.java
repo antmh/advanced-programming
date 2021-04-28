@@ -12,10 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 
-@NamedQuery(name = "findByTitle", query = "SELECT m FROM Movie m WHERE m.title= :title")
+@NamedQuery(name = "movie.findById", query = "SELECT m FROM Movie m WHERE m.id = :id")
+@NamedQuery(name = "movie.findByName", query = "SELECT m FROM Movie m WHERE m.title = :name")
 @Entity
 @Table(name = "MOVIES")
 public class Movie {
@@ -40,8 +42,12 @@ public class Movie {
 	@JoinTable(name = "MOVIES_GENRES_ASSOC", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private Set<Genre> genres;
 
+	@OneToMany(mappedBy = "movie")
+	private Set<ChartEntry> chartEntries;
+
 	public Movie() {
 		genres = new HashSet<>();
+		chartEntries = new HashSet<>();
 	}
 
 	public int getId() {
@@ -90,5 +96,13 @@ public class Movie {
 
 	public void setGenres(Set<Genre> genres) {
 		this.genres = genres;
+	}
+
+	public Set<ChartEntry> getChartEntries() {
+		return chartEntries;
+	}
+
+	public void setChartEntries(Set<ChartEntry> chartEntries) {
+		this.chartEntries = chartEntries;
 	}
 }
