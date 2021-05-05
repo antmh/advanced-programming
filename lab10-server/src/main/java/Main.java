@@ -1,28 +1,26 @@
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import social.Network;
 
 public class Main {
 	public static void main(String[] args) {
-		Network network = new Network();
-		ServerSocket serverSocket = null;
+		var network = new Network();
+		var listener = new Listener(network);
+		var listenerThread = new Thread(listener);
+		System.out.println("Starting...");
+		listenerThread.start();
 		try {
-			serverSocket = new ServerSocket(8100);
-			while (true) {
-				System.out.println("Waiting");
-				Socket socket = serverSocket.accept();
-				new ClientThread(socket, network).start();
+			synchronized (network) {
+				network.wait();
 			}
-		} catch (IOException e) {
-			System.err.println("Communication error: " + e);
-		} finally {
-			try {
-				serverSocket.close();
-			} catch (IOException e) {
-				System.err.println(e);
-			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Server stopped");
+		listener.close();
+		System.out.println("Joining with listener");
+		try {
+			listenerThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 }

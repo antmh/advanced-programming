@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import commands.LoginCommand;
 import commands.ReadCommand;
 import commands.RegisterCommand;
 import commands.SendCommand;
+import commands.StopCommand;
 import social.Network;
 
 public class ClientThread extends Thread {
@@ -30,6 +32,7 @@ public class ClientThread extends Thread {
 		commands.add(new FriendCommand(network, state));
 		commands.add(new ReadCommand(network, state));
 		commands.add(new SendCommand(network, state));
+		commands.add(new StopCommand(network, state));
 	}
 
 	@Override
@@ -38,7 +41,13 @@ public class ClientThread extends Thread {
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			PrintWriter out = new PrintWriter(socket.getOutputStream());
 			while (true) {
-				String request = in.readLine();
+				String request = null;
+				try {
+					request = in.readLine();
+				} catch (SocketTimeoutException e) {
+					System.out.println("Timeout expired");
+					break;
+				}
 				if (request.equals("exit")) {
 					break;
 				}
