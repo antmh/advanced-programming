@@ -51,6 +51,20 @@ public class PersonRepository {
 		return true;
 	}
 
+	public boolean addMessage(String name, String message) {
+		var person = findByName(name);
+		if (person.isEmpty()) {
+			return false;
+		}
+		entityManager.getTransaction().begin();
+		for (var friendName : person.get().getFriends()) {
+			var friend = findByName(friendName).get();
+			entityManager.persist(new Message(person.get(), friend, message));
+		}
+		entityManager.getTransaction().commit();
+		return true;
+	}
+
 	public List<Person> findAll() {
 		var query = entityManager.createQuery("SELECT p FROM Person p");
 		return (List<Person>) query.getResultList();

@@ -27,6 +27,16 @@ public class PersonController {
 	public List<Person> getAll() {
 		return repository.findAll();
 	}
+	
+	@GetMapping("/{name}")
+	public ResponseEntity<Person> get(@PathVariable String name) {
+		var person = repository.findByName(name);
+		if (person.isPresent()) {
+			return new ResponseEntity<>(person.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 
 	@PostMapping
 	public ResponseEntity<String> add(@RequestBody Person person) {
@@ -56,7 +66,7 @@ public class PersonController {
 	}
 
 	@GetMapping("/{name}/friends")
-	public ResponseEntity<Set<Person>> getFriends(@PathVariable String name) {
+	public ResponseEntity<Set<String>> getFriends(@PathVariable String name) {
 		var person = repository.findByName(name);
 		if (person.isPresent()) {
 			return new ResponseEntity<>(person.get().getFriends(), HttpStatus.OK);
@@ -71,6 +81,15 @@ public class PersonController {
 			return new ResponseEntity<>("Friend added", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("Could not add friend", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/{name}/messages")
+	public ResponseEntity<String> sendMessage(@PathVariable String name, @RequestBody String message) {
+		if (repository.addMessage(name, message)) {
+			return new ResponseEntity<>("Sent message", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Person not found", HttpStatus.GONE);
 		}
 	}
 }

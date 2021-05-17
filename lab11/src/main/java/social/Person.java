@@ -15,9 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(value = { "friends" })
 @Entity
 @Table(name = "PEOPLE")
 @NamedQuery(name = "person.find", query = "SELECT p FROM Person p WHERE p.name = :name")
@@ -68,10 +65,14 @@ public class Person {
 		this.name = name;
 	}
 
-	public Set<Person> getFriends() {
-		Set<Person> result = new HashSet<>();
-		result.addAll(friendsWithSmallerIds);
-		result.addAll(friendsWithBiggerIds);
+	public Set<String> getFriends() {
+		Set<String> result = new HashSet<>();
+		for (var friend : friendsWithBiggerIds) {
+			result.add(friend.getName());
+		}
+		for (var friend : friendsWithSmallerIds) {
+			result.add(friend.getName());
+		}
 		return result;
 	}
 

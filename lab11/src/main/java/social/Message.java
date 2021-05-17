@@ -27,6 +27,9 @@ public class Message {
 
 	@Column(name = "content", nullable = false)
 	private String content;
+	
+	public Message() {
+	}
 
 	public Message(Person sender, Person reciever, String content) {
 		this.sender = sender;
@@ -34,12 +37,12 @@ public class Message {
 		this.content = content;
 	}
 
-	public Person getSender() {
-		return sender;
+	public String getSender() {
+		return sender.getName();
 	}
 
-	public Person getReciever() {
-		return reciever;
+	public String getReciever() {
+		return reciever.getName();
 	}
 
 	public String getContent() {
