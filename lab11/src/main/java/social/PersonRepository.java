@@ -2,6 +2,8 @@ package social;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
@@ -52,6 +54,23 @@ public class PersonRepository {
 	public List<Person> findAll() {
 		var query = entityManager.createQuery("SELECT p FROM Person p");
 		return (List<Person>) query.getResultList();
+	}
+
+	public List<Person> getMostConnected(int k) {
+		return findAllSortedByNumberOfConnections().skip(Math.max(0, findAll().size() - k))
+				.collect(Collectors.toList());
+	}
+
+	public List<Person> getLeastConnected(int k) {
+		return findAllSortedByNumberOfConnections().limit(k).collect(Collectors.toList());
+	}
+
+	private Stream<Person> findAllSortedByNumberOfConnections() {
+		return findAll().stream().sorted(this::compareByNumberOfConnections);
+	}
+
+	private int compareByNumberOfConnections(Person first, Person second) {
+		return Integer.compare(first.getFriends().size(), second.getFriends().size());
 	}
 
 	public Optional<Person> findByName(String name) {

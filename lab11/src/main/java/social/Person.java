@@ -40,7 +40,7 @@ public class Person {
 
 	@OneToMany(mappedBy = "reciever")
 	private Set<Message> messages;
-	
+
 	public Person() {
 		this("");
 	}
@@ -59,11 +59,11 @@ public class Person {
 			return this.friendsWithBiggerIds.add(friend);
 		}
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}

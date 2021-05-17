@@ -22,12 +22,12 @@ import social.PersonRepository;
 @RequestMapping("/people")
 public class PersonController {
 	private PersonRepository repository = new PersonRepository();
-	
+
 	@GetMapping
 	public List<Person> getAll() {
 		return repository.findAll();
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<String> add(@RequestBody Person person) {
 		if (repository.create(person)) {
@@ -36,7 +36,7 @@ public class PersonController {
 			return new ResponseEntity<>("Person already exists", HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	@PutMapping("/{oldName}")
 	public ResponseEntity<String> changeName(@PathVariable String oldName, @RequestBody String name) {
 		if (repository.updateName(oldName, name)) {
@@ -45,7 +45,7 @@ public class PersonController {
 			return new ResponseEntity<>("Person not found", HttpStatus.GONE);
 		}
 	}
-	
+
 	@DeleteMapping("/{name}")
 	public ResponseEntity<String> delete(@PathVariable String name) {
 		if (repository.delete(name)) {
@@ -54,7 +54,7 @@ public class PersonController {
 			return new ResponseEntity<>("Person not found", HttpStatus.GONE);
 		}
 	}
-	
+
 	@GetMapping("/{name}/friends")
 	public ResponseEntity<Set<Person>> getFriends(@PathVariable String name) {
 		var person = repository.findByName(name);
@@ -64,7 +64,7 @@ public class PersonController {
 			return new ResponseEntity<>(new HashSet<>(), HttpStatus.GONE);
 		}
 	}
-	
+
 	@PostMapping("/{name}/friends")
 	public ResponseEntity<String> addFriend(@PathVariable String name, @RequestBody String friendName) {
 		if (repository.addFriend(name, friendName)) {
