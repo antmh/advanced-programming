@@ -21,7 +21,7 @@ public class PersonRepository {
 		entityManager.getTransaction().commit();
 		return true;
 	}
-	
+
 	public boolean updateName(String oldName, String newName) {
 		var person = findByName(oldName);
 		if (person.isEmpty()) {
@@ -33,10 +33,25 @@ public class PersonRepository {
 		entityManager.getTransaction().commit();
 		return true;
 	}
-	
+
+	public boolean addFriend(String firstFriendName, String secondFriendName) {
+		var firstFriend = findByName(firstFriendName);
+		var secondFriend = findByName(secondFriendName);
+		if (firstFriend.isEmpty() || secondFriend.isEmpty()) {
+			return false;
+		}
+		if (!firstFriend.get().addFriend(secondFriend.get())) {
+			return false;
+		}
+		entityManager.getTransaction().begin();
+		entityManager.persist(firstFriend.get());
+		entityManager.getTransaction().commit();
+		return true;
+	}
+
 	public List<Person> findAll() {
 		var query = entityManager.createQuery("SELECT p FROM Person p");
-	    return (List<Person>) query.getResultList();
+		return (List<Person>) query.getResultList();
 	}
 
 	public Optional<Person> findByName(String name) {
@@ -47,7 +62,7 @@ public class PersonRepository {
 		}
 		return Optional.of((Person) results.get(0));
 	}
-	
+
 	public boolean delete(String name) {
 		var person = findByName(name);
 		if (person.isEmpty()) {

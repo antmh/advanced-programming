@@ -15,6 +15,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(value = { "friends" })
 @Entity
 @Table(name = "PEOPLE")
 @NamedQuery(name = "person.find", query = "SELECT p FROM Person p WHERE p.name = :name")
