@@ -7,7 +7,7 @@ import social.Person;
 
 public class RegisterCommand extends Command {
 	static Pattern pattern = Pattern.compile("register\\s+(?<name>[^\\s]+)");
-	
+
 	public RegisterCommand(Network network, CommandState state) {
 		super(network, state);
 	}

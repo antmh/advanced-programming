@@ -6,7 +6,7 @@ import social.Person;
 
 public class CommandState {
 	private Optional<Person> person;
-	
+
 	public CommandState() {
 		person = Optional.empty();
 	}

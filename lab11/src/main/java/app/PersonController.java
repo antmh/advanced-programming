@@ -1,11 +1,8 @@
 package app;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import exceptions.FriendAlreadyAddedException;
+import exceptions.PersonAlreadyExistsException;
+import exceptions.PersonNotFoundException;
 import social.Person;
 import social.PersonRepository;
 
@@ -27,69 +27,41 @@ public class PersonController {
 	public List<Person> getAll() {
 		return repository.findAll();
 	}
-	
+
 	@GetMapping("/{name}")
-	public ResponseEntity<Person> get(@PathVariable String name) {
-		var person = repository.findByName(name);
-		if (person.isPresent()) {
-			return new ResponseEntity<>(person.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+	public Person get(@PathVariable String name) throws PersonNotFoundException {
+		return repository.findByName(name);
 	}
 
 	@PostMapping
-	public ResponseEntity<String> add(@RequestBody Person person) {
-		if (repository.create(person)) {
-			return new ResponseEntity<>("Person added", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Person already exists", HttpStatus.CONFLICT);
-		}
+	public void add(@RequestBody Person person) throws PersonAlreadyExistsException {
+		repository.create(person);
 	}
 
 	@PutMapping("/{oldName}")
-	public ResponseEntity<String> changeName(@PathVariable String oldName, @RequestBody String name) {
-		if (repository.updateName(oldName, name)) {
-			return new ResponseEntity<>("Person name changed", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Person not found", HttpStatus.GONE);
-		}
+	public void changeName(@PathVariable String oldName, @RequestBody String name)
+			throws PersonNotFoundException, PersonAlreadyExistsException {
+		repository.updateName(oldName, name);
 	}
 
 	@DeleteMapping("/{name}")
-	public ResponseEntity<String> delete(@PathVariable String name) {
-		if (repository.delete(name)) {
-			return new ResponseEntity<>("Person deleted", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Person not found", HttpStatus.GONE);
-		}
+	public void delete(@PathVariable String name) throws PersonNotFoundException {
+		repository.delete(name);
 	}
 
 	@GetMapping("/{name}/friends")
-	public ResponseEntity<Set<String>> getFriends(@PathVariable String name) {
-		var person = repository.findByName(name);
-		if (person.isPresent()) {
-			return new ResponseEntity<>(person.get().getFriends(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(new HashSet<>(), HttpStatus.GONE);
-		}
+	public Set<String> getFriends(@PathVariable String name) throws PersonNotFoundException {
+		return repository.findByName(name).getFriends();
 	}
 
 	@PostMapping("/{name}/friends")
-	public ResponseEntity<String> addFriend(@PathVariable String name, @RequestBody String friendName) {
-		if (repository.addFriend(name, friendName)) {
-			return new ResponseEntity<>("Friend added", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Could not add friend", HttpStatus.BAD_REQUEST);
-		}
+	public void addFriend(@PathVariable String name, @RequestBody String friendName)
+			throws PersonNotFoundException, FriendAlreadyAddedException {
+		repository.addFriend(name, friendName);
 	}
-	
+
 	@PostMapping("/{name}/messages")
-	public ResponseEntity<String> sendMessage(@PathVariable String name, @RequestBody String message) {
-		if (repository.addMessage(name, message)) {
-			return new ResponseEntity<>("Sent message", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("Person not found", HttpStatus.GONE);
-		}
+	public void sendMessage(@PathVariable String name, @RequestBody String message) throws PersonNotFoundException {
+		repository.addMessage(name, message);
 	}
 }

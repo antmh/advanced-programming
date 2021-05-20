@@ -1,11 +1,14 @@
 package social;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
+
+import exceptions.FriendAlreadyAddedException;
+import exceptions.PersonAlreadyExistsException;
+import exceptions.PersonNotFoundException;
 
 public class PersonRepository {
 	private EntityManager entityManager;
@@ -14,9 +17,9 @@ public class PersonRepository {
 		entityManager = SocialEntityManagerFactory.getInstance().createEntityManager();
 	}
 
-	public boolean create(Person person) {
-		if (findByName(person.getName()).isPresent()) {
-			return false;
+	public boolean create(Person person) throws PersonAlreadyExistsException {
+		if (exists(person.getName())) {
+			throw new PersonAlreadyExistsException();
 		}
 		entityManager.getTransaction().begin();
 		entityManager.persist(person);
@@ -24,42 +27,46 @@ public class PersonRepository {
 		return true;
 	}
 
-	public boolean updateName(String oldName, String newName) {
-		var person = findByName(oldName);
-		if (person.isEmpty()) {
+	private boolean exists(String name) {
+		try {
+			findByName(name);
+		} catch (PersonNotFoundException e) {
 			return false;
 		}
+		return true;
+	}
+
+	public boolean updateName(String oldName, String newName)
+			throws PersonNotFoundException, PersonAlreadyExistsException {
+		if (exists(newName)) {
+			throw new PersonAlreadyExistsException();
+		}
+		var person = findByName(oldName);
 		entityManager.getTransaction().begin();
-		person.get().setName(newName);
-		entityManager.persist(person.get());
+		person.setName(newName);
+		entityManager.persist(person);
 		entityManager.getTransaction().commit();
 		return true;
 	}
 
-	public boolean addFriend(String firstFriendName, String secondFriendName) {
+	public void addFriend(String firstFriendName, String secondFriendName)
+			throws PersonNotFoundException, FriendAlreadyAddedException {
 		var firstFriend = findByName(firstFriendName);
 		var secondFriend = findByName(secondFriendName);
-		if (firstFriend.isEmpty() || secondFriend.isEmpty()) {
-			return false;
-		}
-		if (!firstFriend.get().addFriend(secondFriend.get())) {
-			return false;
+		if (!firstFriend.addFriend(secondFriend)) {
+			throw new FriendAlreadyAddedException();
 		}
 		entityManager.getTransaction().begin();
-		entityManager.persist(firstFriend.get());
+		entityManager.persist(firstFriend);
 		entityManager.getTransaction().commit();
-		return true;
 	}
 
-	public boolean addMessage(String name, String message) {
+	public boolean addMessage(String name, String message) throws PersonNotFoundException {
 		var person = findByName(name);
-		if (person.isEmpty()) {
-			return false;
-		}
 		entityManager.getTransaction().begin();
-		for (var friendName : person.get().getFriends()) {
-			var friend = findByName(friendName).get();
-			entityManager.persist(new Message(person.get(), friend, message));
+		for (var friendName : person.getFriends()) {
+			var friend = findByName(friendName);
+			entityManager.persist(new Message(person, friend, message));
 		}
 		entityManager.getTransaction().commit();
 		return true;
@@ -87,22 +94,19 @@ public class PersonRepository {
 		return Integer.compare(first.getFriends().size(), second.getFriends().size());
 	}
 
-	public Optional<Person> findByName(String name) {
+	public Person findByName(String name) throws PersonNotFoundException {
 		var query = entityManager.createNamedQuery("person.find").setParameter("name", name);
 		var results = query.getResultList();
 		if (results.size() == 0) {
-			return Optional.empty();
+			throw new PersonNotFoundException();
 		}
-		return Optional.of((Person) results.get(0));
+		return (Person) results.get(0);
 	}
 
-	public boolean delete(String name) {
+	public boolean delete(String name) throws PersonNotFoundException {
 		var person = findByName(name);
-		if (person.isEmpty()) {
-			return false;
-		}
 		entityManager.getTransaction().begin();
-		entityManager.remove(person.get());
+		entityManager.remove(person);
 		entityManager.getTransaction().commit();
 		return true;
 	}

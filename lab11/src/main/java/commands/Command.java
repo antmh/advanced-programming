@@ -20,8 +20,8 @@ public abstract class Command {
 		}
 		return Optional.of(execute(matcher));
 	}
-	
+
 	protected abstract Pattern getPattern();
-	
+
 	protected abstract String execute(Matcher matcher);
 }
