@@ -1,4 +1,4 @@
-package app;
+package commandline;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,8 +10,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import commands.Network;
 
 public class Listener implements Runnable {
 	private static final int PORT = 8100;

@@ -1,4 +1,4 @@
-package app;
+package commandline;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,15 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import commands.Command;
-import commands.CommandState;
-import commands.FriendCommand;
-import commands.LoginCommand;
-import commands.Network;
-import commands.ReadCommand;
-import commands.RegisterCommand;
-import commands.SendCommand;
-import commands.StopCommand;
+import commandline.commands.Command;
+import commandline.commands.CommandState;
+import commandline.commands.FriendCommand;
+import commandline.commands.LoginCommand;
+import commandline.commands.ReadCommand;
+import commandline.commands.RegisterCommand;
+import commandline.commands.SendCommand;
+import commandline.commands.StopCommand;
 
 public class ClientThread extends Thread {
 	private Socket socket;

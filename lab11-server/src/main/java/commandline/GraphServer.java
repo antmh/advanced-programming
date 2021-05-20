@@ -1,4 +1,4 @@
-package app;
+package commandline;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
-import commands.Network;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 

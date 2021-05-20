@@ -1,7 +1,9 @@
-package commands;
+package commandline.commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import commandline.Network;
 
 public class StopCommand extends Command {
 	static Pattern pattern = Pattern.compile("stop");

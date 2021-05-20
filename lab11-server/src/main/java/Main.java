@@ -1,16 +1,16 @@
 import java.io.IOException;
 
-import app.Listener;
-import app.GraphServer;
-import app.SpringApp;
-import commands.Network;
+import commandline.GraphServer;
+import commandline.Listener;
+import commandline.Network;
+import spring.App;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		var network = new Network();
 		var listener = new Listener(network);
 		var listenerThread = new Thread(listener);
-		var springThread = new Thread(new SpringApp(args));
+		var springThread = new Thread(new App(args));
 		var server = new GraphServer(network);
 		System.out.println("Starting...");
 		listenerThread.start();

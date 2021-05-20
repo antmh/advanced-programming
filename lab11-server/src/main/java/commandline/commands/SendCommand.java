@@ -1,9 +1,10 @@
-package commands;
+package commandline.commands;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import commandline.Network;
 import social.Person;
 
 public class SendCommand extends Command {

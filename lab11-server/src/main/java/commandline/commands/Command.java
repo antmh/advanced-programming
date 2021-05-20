@@ -1,8 +1,10 @@
-package commands;
+package commandline.commands;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import commandline.Network;
 
 public abstract class Command {
 	protected Network network;
