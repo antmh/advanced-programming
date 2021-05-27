@@ -78,9 +78,10 @@ class Printer {
 	private void printFields() {
 		var fields = clazz.getDeclaredFields();
 		for (var field : fields) {
-			System.out.print(Modifier.toString(field.getModifiers()) + " ");
+			System.out.print("  " + Modifier.toString(field.getModifiers()) + " ");
 			System.out.print(field.getType().getName() + " ");
-			System.out.println(field.getName());
+			System.out.print(field.getName());
+			System.out.println(";");
 		}
 	}
 }

@@ -1,26 +1,32 @@
 package framework;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 public class Framework {
-	public Class<?> clazz;
-
 	public Framework() throws IOException, ClassNotFoundException {
 		var properties = new Properties();
 		properties.load(getClass().getResourceAsStream("/META-INF/testconfig.properties"));
 		var path = properties.getProperty("path");
-		var className = properties.getProperty("class");
 		var loader = new Loader(path);
-		clazz = loader.loadClass(className);
 		loader.close();
+		for (var clazz : loader.getClasses()) {
+			if (clazz.isAnnotationPresent(Test.class) && Modifier.isPublic(clazz.getModifiers())) {
+				print(clazz);
+				System.out.flush();
+				test(clazz);
+				System.out.flush();
+				System.err.flush();
+			}
+		}
 	}
 
-	public void print() {
+	private void print(Class<?> clazz) {
 		new Printer(clazz).print();
 	}
 
-	public void test() {
+	private void test(Class<?> clazz) {
 		new Tester(clazz).test();
 	}
 }
