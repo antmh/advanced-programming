@@ -5,7 +5,7 @@ import framework.Framework;
 
 public class Main {
 	public static void main(String[] args) throws ClassNotFoundException, IOException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+            IllegalArgumentException, InvocationTargetException {
 		new Framework();
 	}
 }
