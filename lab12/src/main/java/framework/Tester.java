@@ -36,8 +36,8 @@ class Tester {
 			}
 		}
 	}
-
-	private boolean callMethod(Method method) {
+	
+	private Optional<Object[]> generateArguments(Method method) {
 		Object[] arguments = new Object[method.getParameterCount()];
 		var parameters = method.getParameters();
 		for (int index = 0; index < method.getParameterCount(); ++index) {
@@ -55,31 +55,34 @@ class Tester {
 			} else if (type.equals(String.class)) {
 				arguments[index] = UUID.randomUUID().toString();
 			} else {
-				System.err.println("Parameter can either be int, long, float, double, boolean or String");
-				return false;
+				return Optional.empty();
 			}
+		}
+		return Optional.of(arguments);
+	}
+
+	private boolean callMethod(Method method) {
+		var arguments = generateArguments(method);
+		if (arguments.isEmpty()) {
+			System.err.println("Parameter can either be int, long, float, double, boolean or String");
+			return false;
 		}
 		try {
 			if (Modifier.isStatic(method.getModifiers())) {
-				method.invoke(null, arguments);
+				method.invoke(null, arguments.get());
 			} else {
 				if (!instance.isPresent()) {
-					try {
-						instance = Optional.of(clazz.getConstructor().newInstance());
-					} catch (NoSuchMethodException e) {
-						System.err.println(
-								"No call a non-static method the class must have a constructor with no arguments");
-						return false;
-					} catch (InstantiationException | SecurityException e) {
-						e.printStackTrace();
-					}
+					instance = Optional.of(clazz.getConstructor().newInstance());
+					System.err
+							.println("No call a non-static method the class must have a constructor with no arguments");
+					return false;
 				}
-				method.invoke(arguments, instance.get());
+				method.invoke(arguments.get(), instance.get());
 			}
 		} catch (InvocationTargetException e) {
 			e.getCause().printStackTrace();
 			return false;
-		} catch (IllegalAccessException | IllegalArgumentException e) {
+		} catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 		return true;
