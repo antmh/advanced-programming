@@ -11,6 +11,8 @@ class Tester {
 	private Class<?> clazz;
 	private Optional<Object> instance = Optional.empty();
 	private Random random = new Random();
+	private int testsPassed = 0;
+	private int testsFailed = 0;
 
 	public Tester(Class<?> clazz) {
 		this.clazz = clazz;
@@ -26,8 +28,10 @@ class Tester {
 				System.err.flush();
 				if (passed) {
 					System.out.println(method.getName() + " test passed");
+					++testsPassed;
 				} else {
 					System.out.println(method.getName() + " test failed");
+					++testsFailed;
 				}
 			}
 		}
@@ -37,17 +41,18 @@ class Tester {
 		Object[] arguments = new Object[method.getParameterCount()];
 		var parameters = method.getParameters();
 		for (int index = 0; index < method.getParameterCount(); ++index) {
-			if (parameters[index].getType().equals(int.class)) {
+			var type = parameters[index].getType();
+			if (type.equals(int.class)) {
 				arguments[index] = random.nextInt();
-			} else if (parameters[index].getType().equals(long.class)) {
+			} else if (type.equals(long.class)) {
 				arguments[index] = random.nextLong();
-			} else if (parameters[index].getType().equals(float.class)) {
+			} else if (type.equals(float.class)) {
 				arguments[index] = random.nextFloat();
-			} else if (parameters[index].getType().equals(double.class)) {
+			} else if (type.equals(double.class)) {
 				arguments[index] = random.nextDouble();
-			} else if (parameters[index].getType().equals(boolean.class)) {
+			} else if (type.equals(boolean.class)) {
 				arguments[index] = random.nextBoolean();
-			} else if (parameters[index].getType().equals(String.class)) {
+			} else if (type.equals(String.class)) {
 				arguments[index] = UUID.randomUUID().toString();
 			} else {
 				System.err.println("Parameter can either be int, long, float, double, boolean or String");
@@ -72,7 +77,7 @@ class Tester {
 				method.invoke(arguments, instance.get());
 			}
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			e.getCause().printStackTrace();
 			return false;
 		} catch (IllegalAccessException | IllegalArgumentException e) {
 			e.printStackTrace();
@@ -85,5 +90,13 @@ class Tester {
 			return false;
 		}
 		return true;
+	}
+
+	public int getTestsPassed() {
+		return testsPassed;
+	}
+
+	public int getTestsFailed() {
+		return testsFailed;
 	}
 }
