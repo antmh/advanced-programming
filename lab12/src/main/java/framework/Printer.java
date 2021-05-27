@@ -11,35 +11,43 @@ class Printer {
 	}
 
 	public void print() {
-		System.out.println("Class name: " + clazz.getName());
-		System.out.println("Package name: " + clazz.getPackageName());
-		System.out.println("Parent: " + clazz.getSuperclass().getName());
+		System.out.print(Modifier.toString(clazz.getModifiers()) + " class " + clazz.getName());
+		System.out.print(" extends " + clazz.getSuperclass().getName());
+		for (int index = 0; index < clazz.getInterfaces().length; ++index) {
+			if (index == 0) {
+				System.out.print(" implements ");
+			} else {
+				System.out.print(", ");
+			}
+			System.out.print(clazz.getInterfaces()[index].getName());
+		}
+		System.out.println(" {");
 		printConstructors();
 		printMethods();
 		printFields();
+		System.out.println("}");
 	}
 
 	private void printConstructors() {
-		System.out.println("Constructors:");
 		var constructors = clazz.getConstructors();
 		for (var constructor : constructors) {
+			System.out.print("  ");
 			System.out.print(Modifier.toString(constructor.getModifiers()) + " ");
 			System.out.print(constructor.getName());
 			printParameters(constructor.getParameters());
 			printExceptions(constructor.getExceptionTypes());
-			System.out.println();
+			System.out.println(";");
 		}
 	}
 
 	private void printMethods() {
-		System.out.println("Methods:");
-		var methods = clazz.getMethods();
+		var methods = clazz.getDeclaredMethods();
 		for (var method : methods) {
-			System.out.print(Modifier.toString(method.getModifiers()) + " ");
+			System.out.print("  " + Modifier.toString(method.getModifiers()) + " ");
 			System.out.print(method.getReturnType().getName() + " " + method.getName());
 			printParameters(method.getParameters());
 			printExceptions(method.getExceptionTypes());
-			System.out.println();
+			System.out.println(";");
 		}
 	}
 
@@ -68,7 +76,6 @@ class Printer {
 	}
 
 	private void printFields() {
-		System.out.println("Fields:");
 		var fields = clazz.getDeclaredFields();
 		for (var field : fields) {
 			System.out.print(Modifier.toString(field.getModifiers()) + " ");
